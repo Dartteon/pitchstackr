@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitch Stack Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --felt: #1a2e1a;
+    --felt-light: #223322;
+    --felt-border: #2d4a2d;
+    --card-bg: #faf8f0;
+    --card-back: #1c3a6e;
+    --card-red: #c0392b;
+    --card-black: #1a1a1a;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --text-main: #f0ead4;
+    --text-muted: #8a9e7a;
+    --pitch-blue: #2563a8;
+    --pitch-blue-light: #3b7dd8;
+    --discard-red: #8b2020;
+    --btn-primary: #c9a84c;
+    --btn-primary-hover: #e8c97a;
+  }
+
+  html, body {
+    min-height: 100vh;
+    background: #111a11;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-main);
+  }
+
+  #app {
+    max-width: 780px;
+    margin: 24px auto;
+    background: var(--felt);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--felt-border);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+  }
+
+  .header {
+    background: linear-gradient(to bottom, #0f1f0f, var(--felt));
+    padding: 16px 24px 12px;
+    border-bottom: 1px solid var(--felt-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+
+  .header .stats {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .header .stats span strong {
+    color: var(--gold-light);
+    font-size: 14px;
+  }
+
+  .main {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .zone-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .card {
+    width: 68px;
+    height: 96px;
+    border-radius: 7px;
+    background: var(--card-bg);
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px 6px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+    flex-shrink: 0;
+    user-select: none;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.5);
+  }
+
+  .card:hover { transform: translateY(-4px); box-shadow: 2px 8px 16px rgba(0,0,0,0.6); }
+
+  .card.selected {
+    transform: translateY(-8px);
+    box-shadow: 0 0 0 2px var(--gold), 2px 12px 20px rgba(0,0,0,0.7);
+  }
+
+  .card.pitch-selected {
+    transform: translateY(-8px);
+    box-shadow: 0 0 0 2px var(--pitch-blue-light), 2px 12px 20px rgba(0,0,0,0.7);
+  }
+
+  .card.disabled { opacity: 0.5; cursor: default; pointer-events: none; }
+
+  .card .rank { font-size: 15px; font-weight: 600; line-height: 1; }
+  .card .suit { font-size: 11px; line-height: 1; }
+  .card .center-suit { font-size: 28px; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .card .bot { transform: rotate(180deg); }
+
+  .red { color: var(--card-red); }
+  .black { color: var(--card-black); }
+
+  .hand-area {
+    background: var(--felt-light);
+    border: 1px solid var(--felt-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    min-height: 130px;
+  }
+
+  .cards-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: 96px;
+    align-items: flex-end;
+  }
+
+  .pitch-stack-area {
+    background: rgba(25, 50, 100, 0.2);
+    border: 1px solid rgba(59, 125, 216, 0.25);
+    border-radius: 10px;
+    padding: 14px 16px;
+    min-height: 80px;
+  }
+
+  .pitch-slots {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pitch-slot {
+    width: 68px;
+    height: 96px;
+    border-radius: 7px;
+    border: 1.5px dashed rgba(59, 125, 216, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: rgba(59, 125, 216, 0.4);
+    position: relative;
+  }
+
+  .pitch-slot .slot-num {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: rgba(59, 125, 216, 0.5);
+    background: var(--felt);
+    padding: 0 4px;
+    letter-spacing: 1px;
+  }
+
+  .discard-pile {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: 96px;
+    align-items: flex-end;
+  }
+
+  .discard-pile .card { opacity: 0.6; pointer-events: none; }
+
+  .btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 9px 18px;
+    border-radius: 6px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-gold {
+    background: var(--btn-primary);
+    border-color: var(--gold-light);
+    color: #1a1200;
+    font-weight: 500;
+  }
+  .btn-gold:hover { background: var(--btn-primary-hover); }
+  .btn-gold:disabled { opacity: 0.4; cursor: default; }
+
+  .btn-outline {
+    background: transparent;
+    border-color: var(--felt-border);
+    color: var(--text-muted);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--text-main); }
+
+  .btn-blue {
+    background: rgba(37, 99, 168, 0.3);
+    border-color: var(--pitch-blue-light);
+    color: #a8c8f8;
+  }
+  .btn-blue:hover { background: rgba(37, 99, 168, 0.5); }
+  .btn-blue:disabled { opacity: 0.4; cursor: default; }
+
+  .btn-red {
+    background: rgba(139, 32, 32, 0.3);
+    border-color: #c04040;
+    color: #f8a8a8;
+  }
+  .btn-red:hover { background: rgba(139, 32, 32, 0.5); }
+  .btn-red:disabled { opacity: 0.4; cursor: default; }
+
+  .action-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .phase-banner {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .instruction {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .turn-badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(201, 168, 76, 0.15);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .guess-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .guess-slot {
+    background: rgba(255,255,255,0.04);
+    border: 1px dashed rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 8px 6px;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .guess-slot.filled {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.08);
+    cursor: pointer;
+  }
+
+  .guess-slot .slot-idx {
+    font-size: 9px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  .card-picker {
+    background: var(--felt-light);
+    border: 1px solid var(--felt-border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+  }
+
+  .card-picker .pick-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .suit-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+
+  .mini-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--felt-border);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.1s;
+    color: var(--text-muted);
+  }
+  .mini-btn:hover { border-color: var(--gold); color: var(--text-main); }
+  .mini-btn.active { background: var(--gold); border-color: var(--gold); color: #1a1200; }
+
+  .result-area {
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .result-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+  }
+
+  .result-card {
+    width: 68px;
+    height: 96px;
+    border-radius: 7px;
+    background: var(--card-bg);
+    border: 3px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.5);
+  }
+
+  .result-card.correct { border-color: #4caf50; }
+  .result-card.wrong { border-color: #e53935; }
+  .result-card .rc-rank { font-size: 16px; font-weight: 600; }
+  .result-card .rc-suit { font-size: 13px; }
+  .result-card .rc-badge {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+  }
+
+  .score-big {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--gold-light);
+    font-family: 'Playfair Display', serif;
+  }
+
+  .score-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  .pitch-order-info {
+    font-size: 10px;
+    color: rgba(59,125,216,0.6);
+    margin-top: 6px;
+  }
+
+  .bottom-note {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 8px;
+    border-top: 1px solid var(--felt-border);
+  }
+
+  .highlight-pitch { color: var(--pitch-blue-light); }
+  .highlight-discard { color: #f87171; }
+  .highlight-gold { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="header">
+    <h1>Pitch Stack Trainer</h1>
+    <div class="stats">
+      <span>Deck: <strong id="hdr-deck">52</strong></span>
+      <span>Turn: <strong id="hdr-turn">0</strong></span>
+      <span>Pitched: <strong id="hdr-pitched">0</strong></span>
+    </div>
+  </div>
+  <div class="main" id="main-content"></div>
+  <div class="bottom-note">Click cards to select them for pitching or discarding · Track what you pitch to recall it later</div>
+</div>
+
+<script>
+const SUITS = ['♠','♥','♦','♣'];
+const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const RED_SUITS = new Set(['♥','♦']);
+
+let state = {
+  deck: [], discard: [], pitchStack: [], hand: [],
+  phase: 'idle', turn: 0, discardCount: 0,
+  selectedCards: [], pitchedThisTurn: [],
+  guesses: [], guessTarget: 0, pickerFor: -1, pickerSuit: '♠',
+};
+
+function makeFullDeck() {
+  const d = [];
+  for (const suit of SUITS) for (const rank of RANKS) d.push({rank, suit, id: rank+suit});
+  return shuffle(d);
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function cardColor(card) { return RED_SUITS.has(card.suit) ? 'red' : 'black'; }
+
+function cardHTML(card, extra='') {
+  const cl = cardColor(card);
+  return `<div class="card ${extra}" data-id="${card.id}">
+    <div><div class="rank ${cl}">${card.rank}</div><div class="suit ${cl}">${card.suit}</div></div>
+    <div class="center-suit ${cl}">${card.suit}</div>
+    <div class="bot"><div class="rank ${cl}">${card.rank}</div><div class="suit ${cl}">${card.suit}</div></div>
+  </div>`;
+}
+
+function updateHeader() {
+  document.getElementById('hdr-deck').textContent = state.deck.length;
+  document.getElementById('hdr-turn').textContent = state.turn;
+  document.getElementById('hdr-pitched').textContent = state.pitchStack.length;
+}
+
+function render() {
+  const mc = document.getElementById('main-content');
+  updateHeader();
+  if (state.phase === 'idle') renderIdle(mc);
+  else if (state.phase === 'select_discard') renderSelectDiscard(mc);
+  else if (state.phase === 'select_pitch_order') renderPitchOrder(mc);
+  else if (state.phase === 'guess') renderGuess(mc);
+  else if (state.phase === 'result') renderResult(mc);
+}
+
+function renderIdle(mc) {
+  mc.innerHTML = `
+    <div>
+      <div class="phase-banner">Welcome to Pitch Stack Trainer</div>
+      <div class="instruction" style="max-width:440px;line-height:1.7">
+        Practice reading your pitch stack — the cards you put to the bottom of your deck each turn.<br><br>
+        Each turn: draw 4 cards → discard 2–3 → pitch the rest to the bottom of your deck in your chosen order.<br><br>
+        When you think you've cycled through to your pitch stack, call it — then guess what's coming!
+      </div>
+      <button class="btn btn-gold" onclick="startGame()">Start Game</button>
+    </div>`;
+}
+
+function startGame() {
+  state.deck = makeFullDeck();
+  state.discard = [];
+  state.pitchStack = [];
+  state.hand = [];
+  state.turn = 0;
+  startTurn();
+}
+
+function startTurn() {
+  if (state.deck.length < 4) {
+    state.deck = shuffle([...state.deck, ...state.discard]);
+    state.discard = [];
+  }
+  state.turn++;
+  state.hand = state.deck.splice(0, 4);
+  state.discardCount = Math.random() < 0.5 ? 2 : 3;
+  state.selectedCards = [];
+  state.pitchedThisTurn = [];
+  state.phase = 'select_discard';
+  render();
+}
+
+function renderDiscardPile() {
+  if (!state.discard.length) return '';
+  const show = state.discard.slice(-4);
+  return `
+    <div>
+      <div class="zone-label">Discard Pile (${state.discard.length} cards)</div>
+      <div class="discard-pile">
+        ${show.map(c => cardHTML(c)).join('')}
+        ${state.discard.length > 4 ? `<span style="font-size:11px;color:var(--text-muted);align-self:center">+${state.discard.length-4} more</span>` : ''}
+      </div>
+    </div>`;
+}
+
+function renderSelectDiscard(mc) {
+  const sel = state.selectedCards;
+  const need = state.discardCount;
+  mc.innerHTML = `
+    <div>
+      <div class="turn-badge">TURN ${state.turn}</div>
+      <div class="phase-banner">Discard Phase</div>
+      <div class="instruction">
+        Select <span class="highlight-discard">${need} card${need>1?'s':''}</span> to discard.
+        The remaining ${4-need} will be pitched to the bottom of your deck.
+      </div>
+      <div class="zone-label">Your Hand — click to select for discard</div>
+      <div class="hand-area">
+        <div class="cards-row" id="hand-row">
+          ${state.hand.map(c => cardHTML(c, sel.includes(c.id)?'selected':'')).join('')}
+        </div>
+      </div>
+      <div class="action-bar" style="margin-top:12px">
+        <button class="btn btn-red" onclick="confirmDiscard()" ${sel.length===need?'':'disabled'}>
+          Discard selected (${sel.length}/${need})
+        </button>
+        <button class="btn btn-outline" onclick="callPitchStack()">
+          <span style="color:var(--gold)">⚑</span> Call Pitch Stack
+        </button>
+      </div>
+    </div>
+    <div class="pitch-stack-area">
+      <div class="zone-label">Pitch Stack (shown for training)</div>
+      <div class="pitch-slots">
+        ${state.pitchStack.map((c,i) => `
+          <div class="pitch-slot">
+            <div class="slot-num">#${i+1}</div>
+            ${cardHTML(c,'disabled')}
+          </div>`).join('') || '<span style="font-size:11px;color:var(--text-muted);padding:8px">No cards pitched yet</span>'}
+      </div>
+      ${state.pitchStack.length ? `<div class="pitch-order-info" style="margin-top:8px">#1 = deepest (pitched first) → #${state.pitchStack.length} = soonest to draw</div>` : ''}
+    </div>
+    ${renderDiscardPile()}`;
+  document.querySelectorAll('#hand-row .card').forEach(el => {
+    el.onclick = () => {
+      const id = el.dataset.id;
+      if (state.selectedCards.includes(id)) {
+        state.selectedCards = state.selectedCards.filter(x=>x!==id);
+      } else if (state.selectedCards.length < state.discardCount) {
+        state.selectedCards.push(id);
+      }
+      render();
+    };
+  });
+}
+
+function confirmDiscard() {
+  state.discard.push(...state.hand.filter(c => state.selectedCards.includes(c.id)));
+  state.hand = state.hand.filter(c => !state.selectedCards.includes(c.id));
+  state.selectedCards = [];
+  state.phase = 'select_pitch_order';
+  render();
+}
+
+function renderPitchOrder(mc) {
+  const cards = state.hand;
+  mc.innerHTML = `
+    <div>
+      <div class="turn-badge">TURN ${state.turn}</div>
+      <div class="phase-banner">Pitch Order</div>
+      <div class="instruction">
+        Click cards in the order you want to pitch them. First click = deepest in deck.
+      </div>
+      <div class="zone-label">Cards to pitch — click in order</div>
+      <div class="hand-area">
+        <div class="cards-row">
+          ${cards.map(c => {
+            const idx = state.selectedCards.indexOf(c.id);
+            const isSel = idx !== -1;
+            return `<div style="position:relative;display:inline-block">
+              ${cardHTML(c, isSel?'pitch-selected':'')}
+              ${isSel ? `<div style="position:absolute;top:-8px;right:-4px;background:var(--pitch-blue-light);color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt)">${idx+1}</div>` : ''}
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--text-muted)">
+        Order: ${state.selectedCards.length ? state.selectedCards.map(id=>`<span class="highlight-pitch">${id}</span>`).join(' → ') : 'click cards above'}
+      </div>
+      <div class="action-bar" style="margin-top:12px">
+        <button class="btn btn-blue" onclick="confirmPitch()" ${state.selectedCards.length===cards.length?'':'disabled'}>
+          Pitch to bottom of deck
+        </button>
+        <button class="btn btn-outline" onclick="resetPitchOrder()">Reset order</button>
+      </div>
+    </div>`;
+  document.querySelectorAll('.hand-area .card').forEach(el => {
+    el.onclick = () => {
+      const id = el.dataset.id;
+      if (!state.selectedCards.includes(id)) { state.selectedCards.push(id); render(); }
+    };
+  });
+}
+
+function resetPitchOrder() { state.selectedCards = []; render(); }
+
+function confirmPitch() {
+  const ordered = state.selectedCards.map(id => state.hand.find(c=>c.id===id));
+  state.pitchStack.push(...ordered);
+  state.deck.push(...ordered);
+  state.hand = [];
+  state.phase = 'select_discard';
+  startTurn();
+}
+
+function callPitchStack() {
+  if (state.pitchStack.length === 0) { alert('No cards have been pitched yet!'); return; }
+  state.guesses = new Array(state.pitchStack.length).fill(null);
+  state.phase = 'guess';
+  state.pickerFor = 0;
+  state.pickerSuit = '♠';
+  render();
+}
+
+function renderGuess(mc) {
+  const len = state.pitchStack.length;
+  const allFilled = state.guesses.every(g=>g!==null);
+  mc.innerHTML = `
+    <div>
+      <div class="phase-banner">Recall the Pitch Stack</div>
+      <div class="instruction">
+        Enter the <span class="highlight-gold">${len} cards</span> in your pitch stack, in order from deepest (#1) to soonest (#${len}).
+      </div>
+      <div class="zone-label">Your guesses — click a slot to edit</div>
+      <div class="guess-grid">
+        ${state.guesses.map((g,i) => `
+          <div class="guess-slot ${g?'filled':''}" onclick="openPicker(${i})">
+            <div class="slot-idx">#${i+1}</div>
+            ${g ? `<div style="font-size:14px;font-weight:500" class="${RED_SUITS.has(g.suit)?'red':'black'}">${g.rank}${g.suit}</div>` : `<div style="font-size:18px;color:rgba(255,255,255,0.2)">?</div>`}
+          </div>`).join('')}
+      </div>
+      ${state.pickerFor !== -1 ? `
+        <div class="card-picker">
+          <div class="pick-label">PICK CARD FOR SLOT #${state.pickerFor+1}</div>
+          <div class="suit-row">
+            ${SUITS.map(s=>`<button class="mini-btn ${s===state.pickerSuit?'active':''}" onclick="setSuit('${s}')">${s}</button>`).join('')}
+          </div>
+          <div class="suit-row" style="flex-wrap:wrap">
+            ${RANKS.map(r=>`<button class="mini-btn" style="font-size:13px" onclick="pickCard('${r}','${state.pickerSuit}')">${r}</button>`).join('')}
+          </div>
+        </div>` : ''}
+      <div class="action-bar" style="margin-top:16px">
+        <button class="btn btn-gold" onclick="submitGuesses()" ${allFilled?'':'disabled'}>Submit Guesses</button>
+        <button class="btn btn-outline" onclick="cancelGuess()">Cancel</button>
+      </div>
+    </div>`;
+}
+
+function openPicker(idx) { state.pickerFor = idx; render(); }
+function setSuit(s) { state.pickerSuit = s; render(); }
+function pickCard(rank, suit) {
+  state.guesses[state.pickerFor] = {rank, suit, id: rank+suit};
+  state.pickerFor = state.pickerFor < state.guesses.length-1 ? state.pickerFor+1 : -1;
+  render();
+}
+function submitGuesses() { state.phase = 'result'; render(); }
+function cancelGuess() { state.phase = 'select_discard'; render(); }
+
+function renderResult(mc) {
+  const actual = state.pitchStack;
+  const guesses = state.guesses;
+  let correct = 0;
+  guesses.forEach((g,i) => { if (g && actual[i] && g.id === actual[i].id) correct++; });
+  const pct = Math.round(correct/actual.length*100);
+  mc.innerHTML = `
+    <div class="result-area">
+      <div class="result-title">Results</div>
+      <div class="score-big">${correct} / ${actual.length}</div>
+      <div class="score-sub">${pct}% accuracy · ${correct===actual.length?'Perfect recall!':correct===0?'Keep practicing!':'Good effort!'}</div>
+      <div style="margin-top:20px">
+        <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap">
+          <div>
+            <div class="zone-label" style="text-align:center;margin-bottom:10px">Actual Stack</div>
+            <div class="result-row">
+              ${actual.map((c,i)=>{
+                const isCorrect = guesses[i] && guesses[i].id === c.id;
+                const cl = cardColor(c);
+                return `<div style="text-align:center">
+                  <div style="font-size:9px;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">#${i+1}</div>
+                  <div class="result-card ${isCorrect?'correct':'wrong'}">
+                    <div class="rc-rank ${cl}">${c.rank}</div>
+                    <div class="rc-suit ${cl}">${c.suit}</div>
+                    <div class="rc-badge">${isCorrect?'✓':'✗'}</div>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+          <div>
+            <div class="zone-label" style="text-align:center;margin-bottom:10px">Your Guesses</div>
+            <div class="result-row">
+              ${guesses.map((g,i)=>{
+                const isCorrect = g && actual[i] && g.id === actual[i].id;
+                if (!g) return `<div style="text-align:center"><div style="font-size:9px;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">#${i+1}</div><div class="result-card wrong" style="display:flex;align-items:center;justify-content:center;color:#aaa;font-size:12px">—</div></div>`;
+                const cl = cardColor(g);
+                return `<div style="text-align:center">
+                  <div style="font-size:9px;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">#${i+1}</div>
+                  <div class="result-card ${isCorrect?'correct':'wrong'}">
+                    <div class="rc-rank ${cl}">${g.rank}</div>
+                    <div class="rc-suit ${cl}">${g.suit}</div>
+                    <div class="rc-badge">${isCorrect?'✓':'✗'}</div>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="action-bar" style="justify-content:center;margin-top:20px;gap:12px">
+        <button class="btn btn-gold" onclick="continueGame()">Continue Game</button>
+        <button class="btn btn-outline" onclick="startGame()">New Game</button>
+      </div>
+    </div>`;
+}
+
+function continueGame() { state.pitchStack = []; startTurn(); }
+
+render();
+</script>
+</body>
+</html>
