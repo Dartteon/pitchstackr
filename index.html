@@ -7,751 +7,508 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --felt:#1a2e1a;--felt-light:#223322;--felt-border:#2d4a2d;
+  --card-bg:#faf8f0;--card-red:#c0392b;--card-black:#1a1a1a;
+  --gold:#c9a84c;--gold-light:#e8c97a;
+  --text-main:#f0ead4;--text-muted:#8a9e7a;
+  --pb:#3b7dd8;
+}
+html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monospace;color:var(--text-main)}
+#app{max-width:820px;margin:24px auto;background:var(--felt);border-radius:16px;overflow:hidden;border:1px solid var(--felt-border);box-shadow:0 8px 40px rgba(0,0,0,.7)}
+.header{background:linear-gradient(to bottom,#0f1f0f,var(--felt));padding:16px 24px 12px;border-bottom:1px solid var(--felt-border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.header h1{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold)}
+.stats{display:flex;gap:20px;font-size:12px;color:var(--text-muted)}
+.stats span strong{color:var(--gold-light);font-size:14px}
+.main{padding:20px 24px;display:flex;flex-direction:column;gap:20px}
+.zlabel{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
 
-  :root {
-    --felt: #1a2e1a;
-    --felt-light: #223322;
-    --felt-border: #2d4a2d;
-    --card-bg: #faf8f0;
-    --card-back: #1c3a6e;
-    --card-red: #c0392b;
-    --card-black: #1a1a1a;
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --text-main: #f0ead4;
-    --text-muted: #8a9e7a;
-    --pitch-blue: #2563a8;
-    --pitch-blue-light: #3b7dd8;
-    --discard-red: #8b2020;
-    --btn-primary: #c9a84c;
-    --btn-primary-hover: #e8c97a;
-  }
+/* FAB card */
+.fc{width:72px;height:100px;border-radius:7px;flex-shrink:0;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;user-select:none;overflow:hidden;background:#1c3a6e;border:1px solid #2a4a8a;box-shadow:2px 3px 8px rgba(0,0,0,.5);display:inline-block}
+.fc img{width:100%;height:100%;object-fit:cover;display:block;border-radius:6px}
+.fc .cl{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.72);padding:2px 3px;font-size:8px;line-height:1.3;color:#fff;text-align:center;border-radius:0 0 6px 6px}
+.fc .pd{position:absolute;top:3px;right:3px;width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.5)}
+.p1{background:#e74c3c}.p2{background:#f39c12}.p3{background:#3498db}
+.fc:hover{transform:translateY(-4px);box-shadow:2px 8px 16px rgba(0,0,0,.6)}
+.fc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),2px 12px 20px rgba(0,0,0,.7)}
+.fc.psel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--pb),2px 12px 20px rgba(0,0,0,.7)}
+.fc.dis{opacity:.5;cursor:default;pointer-events:none}
 
-  html, body {
-    min-height: 100vh;
-    background: #111a11;
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--text-main);
-  }
+/* Poker card */
+.pc{width:72px;height:100px;border-radius:7px;background:var(--card-bg);border:1px solid #ccc;display:flex;flex-direction:column;justify-content:space-between;padding:5px 6px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;flex-shrink:0;user-select:none;box-shadow:2px 3px 8px rgba(0,0,0,.5)}
+.pc:hover{transform:translateY(-4px);box-shadow:2px 8px 16px rgba(0,0,0,.6)}
+.pc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),2px 12px 20px rgba(0,0,0,.7)}
+.pc.psel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--pb),2px 12px 20px rgba(0,0,0,.7)}
+.pc.dis{opacity:.5;cursor:default;pointer-events:none}
+.pc .rk{font-size:15px;font-weight:600;line-height:1}.pc .su{font-size:11px;line-height:1}
+.pc .cs{font-size:28px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.pc .bot{transform:rotate(180deg)}
+.red{color:var(--card-red)}.black{color:var(--card-black)}
 
-  #app {
-    max-width: 780px;
-    margin: 24px auto;
-    background: var(--felt);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--felt-border);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
-  }
+.hand-area{background:var(--felt-light);border:1px solid var(--felt-border);border-radius:10px;padding:14px 16px;min-height:130px}
+.crow{display:flex;gap:8px;flex-wrap:wrap;min-height:100px;align-items:flex-end}
+.psa{background:rgba(25,50,100,.2);border:1px solid rgba(59,125,216,.25);border-radius:10px;padding:14px 16px;min-height:80px}
+.pslots{display:flex;gap:8px;flex-wrap:wrap}
+.pslot{position:relative}
+.pslot .sn{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(59,125,216,.6);background:var(--felt);padding:0 4px;letter-spacing:1px;white-space:nowrap}
+.da{background:rgba(139,32,32,.1);border:1px solid rgba(192,64,64,.2);border-radius:10px;padding:14px 16px}
 
-  .header {
-    background: linear-gradient(to bottom, #0f1f0f, var(--felt));
-    padding: 16px 24px 12px;
-    border-bottom: 1px solid var(--felt-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.btn{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:9px 18px;border-radius:6px;border:1px solid;cursor:pointer;transition:all .15s;letter-spacing:.5px}
+.btn-gold{background:var(--gold);border-color:var(--gold-light);color:#1a1200;font-weight:500}
+.btn-gold:hover{background:var(--gold-light)}.btn-gold:disabled{opacity:.4;cursor:default}
+.btn-o{background:transparent;border-color:var(--felt-border);color:var(--text-muted)}
+.btn-o:hover{border-color:var(--gold);color:var(--text-main)}
+.btn-b{background:rgba(37,99,168,.3);border-color:var(--pb);color:#a8c8f8}
+.btn-b:hover{background:rgba(37,99,168,.5)}.btn-b:disabled{opacity:.4;cursor:default}
+.btn-r{background:rgba(139,32,32,.3);border-color:#c04040;color:#f8a8a8}
+.btn-r:hover{background:rgba(139,32,32,.5)}.btn-r:disabled{opacity:.4;cursor:default}
+.btn-sm{padding:5px 10px;font-size:11px}
+.abar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pbanner{font-family:'Playfair Display',serif;font-size:15px;color:var(--gold);margin-bottom:4px}
+.instr{font-size:11px;color:var(--text-muted);margin-bottom:12px;line-height:1.5}
+.tbadge{display:inline-block;font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:4px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold);margin-bottom:12px}
 
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--gold);
-    letter-spacing: 0.5px;
-  }
+/* Guess */
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:8px;margin:12px 0}
+.gslot{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.15);border-radius:6px;padding:8px 6px;text-align:center;min-height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:var(--text-muted);cursor:pointer}
+.gslot.filled{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.gslot .si{font-size:9px;color:var(--text-muted);margin-bottom:4px;letter-spacing:1px}
+.picker{background:var(--felt-light);border:1px solid var(--felt-border);border-radius:8px;padding:12px;margin-top:8px}
+.picker .pl{font-size:10px;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:10px}
+.prow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.mb{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:5px 10px;border-radius:4px;border:1px solid var(--felt-border);background:transparent;cursor:pointer;transition:all .1s;color:var(--text-muted)}
+.mb:hover{border-color:var(--gold);color:var(--text-main)}.mb.act{background:var(--gold);border-color:var(--gold);color:#1a1200}
 
-  .header .stats {
-    display: flex;
-    gap: 20px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
+/* Result */
+.rarea{background:rgba(0,0,0,.25);border-radius:10px;padding:20px;text-align:center}
+.rtitle{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);margin-bottom:12px}
+.rrow{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:12px 0}
+.rcard{width:72px;height:100px;border-radius:7px;border:3px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:2px 3px 8px rgba(0,0,0,.5);background:#1c3a6e}
+.rcard img{width:100%;height:100%;object-fit:cover}
+.rcard.ok{border-color:#4caf50}.rcard.no{border-color:#e53935}
+.rcard .rov{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:20px}
+.sbig{font-size:36px;font-weight:700;color:var(--gold-light);font-family:'Playfair Display',serif}
+.ssub{font-size:12px;color:var(--text-muted);margin-top:4px}
+.piinfo{font-size:10px;color:rgba(59,125,216,.6);margin-top:6px}
+.bnote{font-size:10px;color:var(--text-muted);text-align:center;padding:8px;border-top:1px solid var(--felt-border)}
+.hp{color:var(--pb)}.hd{color:#f87171}.hg{color:var(--gold)}
 
-  .header .stats span strong {
-    color: var(--gold-light);
-    font-size: 14px;
-  }
-
-  .main {
-    padding: 20px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .zone-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .card {
-    width: 68px;
-    height: 96px;
-    border-radius: 7px;
-    background: var(--card-bg);
-    border: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 5px 6px;
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.15s, box-shadow 0.15s;
-    flex-shrink: 0;
-    user-select: none;
-    box-shadow: 2px 3px 8px rgba(0,0,0,0.5);
-  }
-
-  .card:hover { transform: translateY(-4px); box-shadow: 2px 8px 16px rgba(0,0,0,0.6); }
-
-  .card.selected {
-    transform: translateY(-8px);
-    box-shadow: 0 0 0 2px var(--gold), 2px 12px 20px rgba(0,0,0,0.7);
-  }
-
-  .card.pitch-selected {
-    transform: translateY(-8px);
-    box-shadow: 0 0 0 2px var(--pitch-blue-light), 2px 12px 20px rgba(0,0,0,0.7);
-  }
-
-  .card.disabled { opacity: 0.5; cursor: default; pointer-events: none; }
-
-  .card .rank { font-size: 15px; font-weight: 600; line-height: 1; }
-  .card .suit { font-size: 11px; line-height: 1; }
-  .card .center-suit { font-size: 28px; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-  .card .bot { transform: rotate(180deg); }
-
-  .red { color: var(--card-red); }
-  .black { color: var(--card-black); }
-
-  .hand-area {
-    background: var(--felt-light);
-    border: 1px solid var(--felt-border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    min-height: 130px;
-  }
-
-  .cards-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    min-height: 96px;
-    align-items: flex-end;
-  }
-
-  .pitch-stack-area {
-    background: rgba(25, 50, 100, 0.2);
-    border: 1px solid rgba(59, 125, 216, 0.25);
-    border-radius: 10px;
-    padding: 14px 16px;
-    min-height: 80px;
-  }
-
-  .pitch-slots {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .pitch-slot {
-    width: 68px;
-    height: 96px;
-    border-radius: 7px;
-    border: 1.5px dashed rgba(59, 125, 216, 0.35);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    color: rgba(59, 125, 216, 0.4);
-    position: relative;
-  }
-
-  .pitch-slot .slot-num {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 9px;
-    color: rgba(59, 125, 216, 0.5);
-    background: var(--felt);
-    padding: 0 4px;
-    letter-spacing: 1px;
-  }
-
-  .discard-pile {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    min-height: 96px;
-    align-items: flex-end;
-  }
-
-  .discard-pile .card { opacity: 0.6; pointer-events: none; }
-
-  .btn {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    padding: 9px 18px;
-    border-radius: 6px;
-    border: 1px solid;
-    cursor: pointer;
-    transition: all 0.15s;
-    letter-spacing: 0.5px;
-  }
-
-  .btn-gold {
-    background: var(--btn-primary);
-    border-color: var(--gold-light);
-    color: #1a1200;
-    font-weight: 500;
-  }
-  .btn-gold:hover { background: var(--btn-primary-hover); }
-  .btn-gold:disabled { opacity: 0.4; cursor: default; }
-
-  .btn-outline {
-    background: transparent;
-    border-color: var(--felt-border);
-    color: var(--text-muted);
-  }
-  .btn-outline:hover { border-color: var(--gold); color: var(--text-main); }
-
-  .btn-blue {
-    background: rgba(37, 99, 168, 0.3);
-    border-color: var(--pitch-blue-light);
-    color: #a8c8f8;
-  }
-  .btn-blue:hover { background: rgba(37, 99, 168, 0.5); }
-  .btn-blue:disabled { opacity: 0.4; cursor: default; }
-
-  .btn-red {
-    background: rgba(139, 32, 32, 0.3);
-    border-color: #c04040;
-    color: #f8a8a8;
-  }
-  .btn-red:hover { background: rgba(139, 32, 32, 0.5); }
-  .btn-red:disabled { opacity: 0.4; cursor: default; }
-
-  .action-bar {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .phase-banner {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    color: var(--gold);
-    margin-bottom: 4px;
-  }
-
-  .instruction {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
-
-  .turn-badge {
-    display: inline-block;
-    font-size: 10px;
-    letter-spacing: 1px;
-    padding: 3px 10px;
-    border-radius: 4px;
-    background: rgba(201, 168, 76, 0.15);
-    border: 1px solid rgba(201, 168, 76, 0.3);
-    color: var(--gold);
-    margin-bottom: 12px;
-  }
-
-  .guess-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 8px;
-    margin: 12px 0;
-  }
-
-  .guess-slot {
-    background: rgba(255,255,255,0.04);
-    border: 1px dashed rgba(255,255,255,0.15);
-    border-radius: 6px;
-    padding: 8px 6px;
-    text-align: center;
-    min-height: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  .guess-slot.filled {
-    border-color: var(--gold);
-    background: rgba(201,168,76,0.08);
-    cursor: pointer;
-  }
-
-  .guess-slot .slot-idx {
-    font-size: 9px;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-    letter-spacing: 1px;
-  }
-
-  .card-picker {
-    background: var(--felt-light);
-    border: 1px solid var(--felt-border);
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 8px;
-  }
-
-  .card-picker .pick-label {
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    color: var(--text-muted);
-    margin-bottom: 10px;
-  }
-
-  .suit-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
-
-  .mini-btn {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    padding: 5px 10px;
-    border-radius: 4px;
-    border: 1px solid var(--felt-border);
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.1s;
-    color: var(--text-muted);
-  }
-  .mini-btn:hover { border-color: var(--gold); color: var(--text-main); }
-  .mini-btn.active { background: var(--gold); border-color: var(--gold); color: #1a1200; }
-
-  .result-area {
-    background: rgba(0,0,0,0.25);
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-  }
-
-  .result-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: var(--gold);
-    margin-bottom: 12px;
-  }
-
-  .result-row {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin: 12px 0;
-  }
-
-  .result-card {
-    width: 68px;
-    height: 96px;
-    border-radius: 7px;
-    background: var(--card-bg);
-    border: 3px solid transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: 2px 3px 8px rgba(0,0,0,0.5);
-  }
-
-  .result-card.correct { border-color: #4caf50; }
-  .result-card.wrong { border-color: #e53935; }
-  .result-card .rc-rank { font-size: 16px; font-weight: 600; }
-  .result-card .rc-suit { font-size: 13px; }
-  .result-card .rc-badge {
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 14px;
-  }
-
-  .score-big {
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--gold-light);
-    font-family: 'Playfair Display', serif;
-  }
-
-  .score-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-
-  .pitch-order-info {
-    font-size: 10px;
-    color: rgba(59,125,216,0.6);
-    margin-top: 6px;
-  }
-
-  .bottom-note {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-align: center;
-    padding: 8px;
-    border-top: 1px solid var(--felt-border);
-  }
-
-  .highlight-pitch { color: var(--pitch-blue-light); }
-  .highlight-discard { color: #f87171; }
-  .highlight-gold { color: var(--gold); }
+/* Import */
+.iscreen h2{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);margin-bottom:8px}
+.iscreen p{font-size:11px;color:var(--text-muted);margin-bottom:14px;line-height:1.6}
+.iscreen textarea{width:100%;min-height:180px;background:rgba(0,0,0,.3);border:1px solid var(--felt-border);border-radius:8px;color:var(--text-main);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:10px 12px;resize:vertical;line-height:1.5}
+.iscreen textarea:focus{outline:none;border-color:var(--gold)}
+.ierr{font-size:11px;color:#f87171;margin-top:6px}
+.itabs{display:flex;gap:0;margin-bottom:16px}
+.itab{font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 16px;border:1px solid var(--felt-border);background:transparent;color:var(--text-muted);cursor:pointer}
+.itab:first-child{border-radius:6px 0 0 6px}.itab:last-child{border-radius:0 6px 6px 0;border-left:none}
+.itab.act{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold)}
+.guide{background:rgba(0,0,0,.2);border-radius:8px;padding:12px 14px;font-size:11px;color:var(--text-muted);line-height:1.7;margin-bottom:12px}
+.guide code{color:var(--gold-light);background:rgba(201,168,76,.1);padding:1px 5px;border-radius:3px}
 </style>
 </head>
 <body>
-
 <div id="app">
   <div class="header">
     <h1>Pitch Stack Trainer</h1>
-    <div class="stats">
-      <span>Deck: <strong id="hdr-deck">52</strong></span>
-      <span>Turn: <strong id="hdr-turn">0</strong></span>
-      <span>Pitched: <strong id="hdr-pitched">0</strong></span>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div class="stats" id="hdr-stats">
+        <span>Deck: <strong id="hdr-deck">—</strong></span>
+        <span>Turn: <strong id="hdr-turn">0</strong></span>
+        <span>Pitched: <strong id="hdr-pitched">0</strong></span>
+      </div>
+      <button class="btn btn-sm" id="train-toggle" onclick="toggleTraining()" style="font-size:10px;padding:5px 12px;border-radius:5px;border:1px solid rgba(201,168,76,0.4);background:rgba(201,168,76,0.12);color:var(--gold);cursor:pointer;font-family:'IBM Plex Mono',monospace;letter-spacing:0.5px">Training: ON</button>
     </div>
   </div>
-  <div class="main" id="main-content"></div>
-  <div class="bottom-note">Click cards to select them for pitching or discarding · Track what you pitch to recall it later</div>
+  <div class="main" id="mc"></div>
+  <div class="bnote">Practice tracking your pitch stack — cards pitched earlier are deeper in the deck</div>
 </div>
-
 <script>
-const SUITS = ['♠','♥','♦','♣'];
-const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-const RED_SUITS = new Set(['♥','♦']);
+const IMG = 'https://storage.googleapis.com/fabmaster/media/images/';
+const SUITS=['♠','♥','♦','♣'],RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const RS=new Set(['♥','♦']);
+const PW={red:1,yellow:2,blue:3};
 
-let state = {
-  deck: [], discard: [], pitchStack: [], hand: [],
-  phase: 'idle', turn: 0, discardCount: 0,
-  selectedCards: [], pitchedThisTurn: [],
-  guesses: [], guessTarget: 0, pickerFor: -1, pickerSuit: '♠',
+function imgUrl(id){return IMG+id+'.width-450.png'}
+
+function toSlug(name){
+  return name.trim().toLowerCase().replace(/['']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+function makeId(name,pitch){
+  const p={red:'red',yellow:'yellow',blue:'blue',1:'red',2:'yellow',3:'blue'}[String(pitch).toLowerCase()];
+  const s=toSlug(name);
+  return p?s+'-'+p:s;
+}
+
+function parseDeck(text){
+  const cards=[];
+  const PW={red:1,yellow:2,blue:3};
+  const SKIP=/^(name:|hero:|format:|arena cards|deck cards|equipment cards|sideboard|notes|made with|see the full|\/\/|https?:\/\/)/i;
+  let inDeck=false;
+
+  for(let raw of text.split('\n')){
+    let ln=raw.trim();
+    if(!ln) continue;
+    if(/^arena cards/i.test(ln)){inDeck=false;continue}
+    if(/^deck cards/i.test(ln)){inDeck=true;continue}
+    if(SKIP.test(ln)) continue;
+
+    // Main Fabrary format: "3x Boulder Drop (red)"
+    const m=ln.match(/^(\d+)x\s+(.+?)\s+\((red|yellow|blue)\)\s*$/i);
+    if(m){
+      if(!inDeck) continue;
+      const count=+m[1],name=m[2].trim(),pitch=m[3].toLowerCase();
+      const pitchNum=PW[pitch],identifier=makeId(name,pitch);
+      for(let i=0;i<count;i++) cards.push({id:identifier+'_'+cards.length,name,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:imgUrl(identifier)});
+      continue;
+    }
+
+    // Equipment / no-pitch lines — skip
+    if(/^\d+x\s+[^(]+$/.test(ln)) continue;
+
+    // Bullet format fallback: "3xName●●"
+    let pitch=null,pitchNum=null,count=1,cm;
+    const bm=ln.match(/^(\d+)x(.+?)(●+)\s*$/u);
+    if(bm){
+      if(!inDeck) continue;
+      count=+bm[1];const name=bm[2].trim(),dots=bm[3].length;
+      pitchNum=dots;pitch=['','red','yellow','blue'][dots]||null;
+      const identifier=makeId(name,pitch);
+      for(let i=0;i<count;i++) cards.push({id:identifier+'_'+cards.length,name,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:imgUrl(identifier)});
+      continue;
+    }
+
+    // Legacy word-pitch: "(3) Name (red)" / "3 Name (red)"
+    const pm=ln.match(/\b(red|yellow|blue)\b/i);
+    if(pm){
+      pitch=pm[1].toLowerCase();pitchNum=PW[pitch];
+      ln=ln.replace(/\s*[\[(]?\b(red|yellow|blue)\b[\])]?/i,'').trim();
+      if((cm=ln.match(/^\(?(\d+)\)?\s+/))){count=+cm[1];ln=ln.slice(cm[0].length)}
+      else if((cm=ln.match(/^(\d+)x\s*/i))){count=+cm[1];ln=ln.slice(cm[0].length)}
+      ln=ln.replace(/\s*\([A-Z]{2,5}\d*\)\s*$/,'').trim();
+      if(!ln) continue;
+      const identifier=makeId(ln,pitch);
+      for(let i=0;i<count;i++) cards.push({id:identifier+'_'+cards.length,name:ln,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:imgUrl(identifier)});
+    }
+  }
+  return cards;
+}
+
+let S={
+  src:null,master:[],deck:[],discard:[],pitchStack:[],hand:[],
+  phase:'idle',turn:0,discCount:0,sel:[],guesses:[],
+  pickerFor:-1,pSuit:'♠',pFilter:'',
+  tab:'fab',importText:'',importErr:'',preview:[],
+  training:true
 };
 
-function makeFullDeck() {
-  const d = [];
-  for (const suit of SUITS) for (const rank of RANKS) d.push({rank, suit, id: rank+suit});
-  return shuffle(d);
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+function makePoker(){const d=[];for(const s of SUITS)for(const r of RANKS)d.push({id:r+s,rank:r,suit:s,isPoker:true});return shuffle(d)}
+
+function numBadge(n){return`<div style="position:absolute;top:-8px;right:-4px;background:var(--pb);color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt)">${n}</div>`}
+
+function fcHTML(c,cls='',nb=null){
+  return`<div style="position:relative;display:inline-block">
+<div class="fc ${cls}" data-id="${c.id}">
+  <img src="${c.imgUrl}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+  <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;padding:4px;text-align:center"><div style="font-size:8px;color:var(--text-main);line-height:1.2">${c.name}</div></div>
+  ${c.pitch?`<div class="pd p${c.pitch}"></div>`:''}
+  <div class="cl">${c.name}${c.pitchStr?' ('+c.pitchStr+')':''}</div>
+</div>${nb!==null?numBadge(nb):''}</div>`;
 }
 
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length-1; i>0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
+function pcHTML(c,cls='',nb=null){
+  const cl=RS.has(c.suit)?'red':'black';
+  return`<div style="position:relative;display:inline-block">
+<div class="pc ${cls}" data-id="${c.id}">
+  <div><div class="rk ${cl}">${c.rank}</div><div class="su ${cl}">${c.suit}</div></div>
+  <div class="cs ${cl}">${c.suit}</div>
+  <div class="bot"><div class="rk ${cl}">${c.rank}</div><div class="su ${cl}">${c.suit}</div></div>
+</div>${nb!==null?numBadge(nb):''}</div>`;
+}
+
+function ch(c,cls='',nb=null){return c.isPoker?pcHTML(c,cls,nb):fcHTML(c,cls,nb)}
+
+function updHdr(){
+  document.getElementById('hdr-deck').textContent=S.deck.length;
+  document.getElementById('hdr-turn').textContent=S.turn;
+  document.getElementById('hdr-pitched').textContent=S.pitchStack.length;
+  const stats=document.getElementById('hdr-stats');
+  const tog=document.getElementById('train-toggle');
+  if(stats) stats.style.visibility=S.training?'visible':'hidden';
+  if(tog){tog.textContent='Training: '+(S.training?'ON':'OFF');tog.style.background=S.training?'rgba(201,168,76,0.12)':'rgba(255,255,255,0.06)';tog.style.color=S.training?'var(--gold)':'var(--text-muted)';tog.style.borderColor=S.training?'rgba(201,168,76,0.4)':'rgba(255,255,255,0.15)';}
+}
+window.toggleTraining=function(){S.training=!S.training;render()};
+
+function render(){
+  updHdr();
+  const mc=document.getElementById('mc');
+  if(S.phase==='idle')rIdle(mc);
+  else if(S.phase==='discard')rDiscard(mc);
+  else if(S.phase==='pitch')rPitch(mc);
+  else if(S.phase==='guess')rGuess(mc);
+  else if(S.phase==='result')rResult(mc);
+}
+
+// ── IDLE ──────────────────────────────────────────────────────────────────────
+function rIdle(mc){
+  const fab=S.tab==='fab';
+  mc.innerHTML=`<div class="iscreen">
+<h2>Load Your Deck</h2>
+<div class="itabs">
+  <button class="itab${fab?' act':''}" onclick="ST('fab')">Fabrary Deck</button>
+  <button class="itab${!fab?' act':''}" onclick="ST('poker')">Poker Cards</button>
+</div>
+${fab?`
+<div class="guide">
+  On Fabrary, open your deck → click <code>Copy</code> (top right) → paste the whole thing below.<br>
+  <code>Deck cards</code> lines are imported. Arena cards, hero, equipment are skipped automatically.
+</div>
+<textarea id="ita" placeholder="Paste your full Fabrary copy here…
+
+Name: My Deck
+Hero: Victor Goldmane
+Format: Classic Constructed
+Arena cards
+1x Arcanite Skullcap
+…
+Deck cards
+3x Boulder Drop (red)
+3x Spinal Crush (red)
+3x Clash of Bravado (yellow)
+3x Cranial Crush (blue)
+…">${S.importText}</textarea>
+<div class="ierr" id="ierr">${S.importErr}</div>
+<div id="pv" style="margin-top:12px">${S.preview.length?'<div class="zlabel">'+S.preview.length+' cards loaded — preview</div><div class="crow" style="margin-top:6px">'+S.preview.slice(0,14).map(c=>fcHTML(c,'dis')).join('')+(S.preview.length>14?'<span style="font-size:11px;color:var(--text-muted);align-self:center">+' +(S.preview.length-14)+' more</span>':'')+'</div>':''}</div>
+<div class="abar" style="margin-top:14px">
+  <button class="btn btn-gold" onclick="startFab()" ${S.preview.length?'':'disabled'}>Start with This Deck</button>
+  ${S.preview.length?'':'<span style="font-size:11px;color:var(--text-muted)">Paste your deck above to continue</span>'}
+</div>`
+:`<p>Practice with a standard 52-card poker deck to learn the pitch stacking mechanic before using your real FaB cards.</p>
+<button class="btn btn-gold" onclick="startPoker()">Start with Poker Deck</button>`}
+</div>`;
+  const ta=document.getElementById('ita');
+  if(ta){
+    ta.addEventListener('input',e=>{
+      S.importText=e.target.value;
+      const cards=parseDeck(e.target.value);
+      S.preview=cards;
+      S.importErr=cards.length?'':(e.target.value.trim()?'No cards found — make sure you copied from Fabrary':'');
+      // Partial re-render: just update err + button + preview without touching textarea
+      const errEl=document.getElementById('ierr');
+      if(errEl) errEl.textContent=S.importErr;
+      const btn=document.querySelector('.btn-gold');
+      if(btn) btn.disabled=!cards.length;
+      const pvEl=document.getElementById('pv');
+      if(pvEl) pvEl.innerHTML=cards.length
+        ? '<div class="zlabel">'+cards.length+' cards loaded — preview</div><div class="crow" style="margin-top:6px">'+cards.slice(0,14).map(c=>fcHTML(c,'dis')).join('')+(cards.length>14?'<span style="font-size:11px;color:var(--text-muted);align-self:center">+' +(cards.length-14)+' more</span>':'')+'</div>'
+        : '';
+    });
   }
-  return a;
 }
 
-function cardColor(card) { return RED_SUITS.has(card.suit) ? 'red' : 'black'; }
+window.ST=t=>{S.tab=t;S.importErr='';render()};
 
-function cardHTML(card, extra='') {
-  const cl = cardColor(card);
-  return `<div class="card ${extra}" data-id="${card.id}">
-    <div><div class="rank ${cl}">${card.rank}</div><div class="suit ${cl}">${card.suit}</div></div>
-    <div class="center-suit ${cl}">${card.suit}</div>
-    <div class="bot"><div class="rank ${cl}">${card.rank}</div><div class="suit ${cl}">${card.suit}</div></div>
-  </div>`;
+window.startFab=function(){
+  if(!S.preview.length)return;
+  S.master=[...S.preview];S.src='fab';
+  init(shuffle([...S.master]));
+};
+window.startPoker=function(){S.src='poker';init(makePoker())};
+
+function init(deck){
+  S.deck=deck;S.discard=[];S.pitchStack=[];S.hand=[];S.turn=0;
+  nextTurn();
 }
 
-function updateHeader() {
-  document.getElementById('hdr-deck').textContent = state.deck.length;
-  document.getElementById('hdr-turn').textContent = state.turn;
-  document.getElementById('hdr-pitched').textContent = state.pitchStack.length;
+function nextTurn(){
+  if(S.deck.length<4){S.deck=shuffle([...S.deck,...S.discard]);S.discard=[]}
+  S.turn++;S.hand=S.deck.splice(0,4);S.sel=[];S.phase='discard';render();
 }
 
-function render() {
-  const mc = document.getElementById('main-content');
-  updateHeader();
-  if (state.phase === 'idle') renderIdle(mc);
-  else if (state.phase === 'select_discard') renderSelectDiscard(mc);
-  else if (state.phase === 'select_pitch_order') renderPitchOrder(mc);
-  else if (state.phase === 'guess') renderGuess(mc);
-  else if (state.phase === 'result') renderResult(mc);
+function discPile(){
+  if(!S.discard.length)return'';
+  const show=S.discard.slice(-5);
+  return`<div class="da"><div class="zlabel">Discard Pile (${S.discard.length})</div>
+<div class="crow">${show.map(c=>ch(c,'dis')).join('')}${S.discard.length>5?`<span style="font-size:11px;color:var(--text-muted);align-self:center">+${S.discard.length-5} more</span>`:''}</div></div>`;
 }
 
-function renderIdle(mc) {
-  mc.innerHTML = `
-    <div>
-      <div class="phase-banner">Welcome to Pitch Stack Trainer</div>
-      <div class="instruction" style="max-width:440px;line-height:1.7">
-        Practice reading your pitch stack — the cards you put to the bottom of your deck each turn.<br><br>
-        Each turn: draw 4 cards → discard 2–3 → pitch the rest to the bottom of your deck in your chosen order.<br><br>
-        When you think you've cycled through to your pitch stack, call it — then guess what's coming!
-      </div>
-      <button class="btn btn-gold" onclick="startGame()">Start Game</button>
-    </div>`;
-}
-
-function startGame() {
-  state.deck = makeFullDeck();
-  state.discard = [];
-  state.pitchStack = [];
-  state.hand = [];
-  state.turn = 0;
-  startTurn();
-}
-
-function startTurn() {
-  if (state.deck.length < 4) {
-    state.deck = shuffle([...state.deck, ...state.discard]);
-    state.discard = [];
-  }
-  state.turn++;
-  state.hand = state.deck.splice(0, 4);
-  state.discardCount = Math.random() < 0.5 ? 2 : 3;
-  state.selectedCards = [];
-  state.pitchedThisTurn = [];
-  state.phase = 'select_discard';
-  render();
-}
-
-function renderDiscardPile() {
-  if (!state.discard.length) return '';
-  const show = state.discard.slice(-4);
-  return `
-    <div>
-      <div class="zone-label">Discard Pile (${state.discard.length} cards)</div>
-      <div class="discard-pile">
-        ${show.map(c => cardHTML(c)).join('')}
-        ${state.discard.length > 4 ? `<span style="font-size:11px;color:var(--text-muted);align-self:center">+${state.discard.length-4} more</span>` : ''}
-      </div>
-    </div>`;
-}
-
-function renderSelectDiscard(mc) {
-  const sel = state.selectedCards;
-  const need = state.discardCount;
-  mc.innerHTML = `
-    <div>
-      <div class="turn-badge">TURN ${state.turn}</div>
-      <div class="phase-banner">Discard Phase</div>
-      <div class="instruction">
-        Select <span class="highlight-discard">${need} card${need>1?'s':''}</span> to discard.
-        The remaining ${4-need} will be pitched to the bottom of your deck.
-      </div>
-      <div class="zone-label">Your Hand — click to select for discard</div>
-      <div class="hand-area">
-        <div class="cards-row" id="hand-row">
-          ${state.hand.map(c => cardHTML(c, sel.includes(c.id)?'selected':'')).join('')}
-        </div>
-      </div>
-      <div class="action-bar" style="margin-top:12px">
-        <button class="btn btn-red" onclick="confirmDiscard()" ${sel.length===need?'':'disabled'}>
-          Discard selected (${sel.length}/${need})
-        </button>
-        <button class="btn btn-outline" onclick="callPitchStack()">
-          <span style="color:var(--gold)">⚑</span> Call Pitch Stack
-        </button>
-      </div>
-    </div>
-    <div class="pitch-stack-area">
-      <div class="zone-label">Pitch Stack (shown for training)</div>
-      <div class="pitch-slots">
-        ${state.pitchStack.map((c,i) => `
-          <div class="pitch-slot">
-            <div class="slot-num">#${i+1}</div>
-            ${cardHTML(c,'disabled')}
-          </div>`).join('') || '<span style="font-size:11px;color:var(--text-muted);padding:8px">No cards pitched yet</span>'}
-      </div>
-      ${state.pitchStack.length ? `<div class="pitch-order-info" style="margin-top:8px">#1 = deepest (pitched first) → #${state.pitchStack.length} = soonest to draw</div>` : ''}
-    </div>
-    ${renderDiscardPile()}`;
-  document.querySelectorAll('#hand-row .card').forEach(el => {
-    el.onclick = () => {
-      const id = el.dataset.id;
-      if (state.selectedCards.includes(id)) {
-        state.selectedCards = state.selectedCards.filter(x=>x!==id);
-      } else if (state.selectedCards.length < state.discardCount) {
-        state.selectedCards.push(id);
-      }
+// ── DISCARD ───────────────────────────────────────────────────────────────────
+function rDiscard(mc){
+  const n=S.sel.length;
+  const canDiscard=n>=1&&n<=3;
+  const remaining=4-n;
+  mc.innerHTML=`<div>
+<div class="tbadge">TURN ${S.turn}</div>
+<div class="pbanner">Discard Phase</div>
+<div class="instr">Select <span class="hd">1–3 cards</span> to discard. The remaining ${remaining} will be pitched to the bottom of your deck.</div>
+<div class="zlabel">Your Hand</div>
+<div class="hand-area"><div class="crow" id="hr">${S.hand.map(c=>ch(c,S.sel.includes(c.id)?'sel':'')).join('')}</div></div>
+<div class="abar" style="margin-top:12px">
+  <button class="btn btn-r" onclick="doDiscard()" ${canDiscard?'':'disabled'}>Discard ${n>0?n+' card'+(n>1?'s':''):'…'}</button>
+  <button class="btn btn-o" onclick="callStack()"><span class="hg">⚑</span> Call Pitch Stack</button>
+  <button class="btn btn-o btn-sm" style="margin-left:auto" onclick="goHome()">Change Deck</button>
+</div></div>
+${S.training?`<div class="psa">
+<div class="zlabel">Pitch Stack (shown for training)</div>
+<div class="pslots">${S.pitchStack.map((c,i)=>`<div class="pslot"><div class="sn">#${i+1}</div>${ch(c,'dis')}</div>`).join('')||'<span style="font-size:11px;color:var(--text-muted);padding:8px">No cards pitched yet</span>'}</div>
+${S.pitchStack.length?`<div class="piinfo" style="margin-top:8px">#1 = deepest · #${S.pitchStack.length} = soonest to draw</div>`:''}
+</div>`:''}
+${discPile()}`;
+  document.querySelectorAll('#hr .fc,#hr .pc').forEach(el=>{
+    el.onclick=()=>{
+      const id=el.dataset.id;
+      if(S.sel.includes(id))S.sel=S.sel.filter(x=>x!==id);
+      else if(S.sel.length<3)S.sel.push(id);
       render();
     };
   });
 }
 
-function confirmDiscard() {
-  state.discard.push(...state.hand.filter(c => state.selectedCards.includes(c.id)));
-  state.hand = state.hand.filter(c => !state.selectedCards.includes(c.id));
-  state.selectedCards = [];
-  state.phase = 'select_pitch_order';
-  render();
-}
+window.doDiscard=function(){
+  S.discard.push(...S.hand.filter(c=>S.sel.includes(c.id)));
+  S.hand=S.hand.filter(c=>!S.sel.includes(c.id));
+  S.sel=[];S.phase='pitch';render();
+};
+window.goHome=function(){S.phase='idle';S.preview=[];render()};
 
-function renderPitchOrder(mc) {
-  const cards = state.hand;
-  mc.innerHTML = `
-    <div>
-      <div class="turn-badge">TURN ${state.turn}</div>
-      <div class="phase-banner">Pitch Order</div>
-      <div class="instruction">
-        Click cards in the order you want to pitch them. First click = deepest in deck.
-      </div>
-      <div class="zone-label">Cards to pitch — click in order</div>
-      <div class="hand-area">
-        <div class="cards-row">
-          ${cards.map(c => {
-            const idx = state.selectedCards.indexOf(c.id);
-            const isSel = idx !== -1;
-            return `<div style="position:relative;display:inline-block">
-              ${cardHTML(c, isSel?'pitch-selected':'')}
-              ${isSel ? `<div style="position:absolute;top:-8px;right:-4px;background:var(--pitch-blue-light);color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt)">${idx+1}</div>` : ''}
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-      <div style="margin-top:12px;font-size:11px;color:var(--text-muted)">
-        Order: ${state.selectedCards.length ? state.selectedCards.map(id=>`<span class="highlight-pitch">${id}</span>`).join(' → ') : 'click cards above'}
-      </div>
-      <div class="action-bar" style="margin-top:12px">
-        <button class="btn btn-blue" onclick="confirmPitch()" ${state.selectedCards.length===cards.length?'':'disabled'}>
-          Pitch to bottom of deck
-        </button>
-        <button class="btn btn-outline" onclick="resetPitchOrder()">Reset order</button>
-      </div>
-    </div>`;
-  document.querySelectorAll('.hand-area .card').forEach(el => {
-    el.onclick = () => {
-      const id = el.dataset.id;
-      if (!state.selectedCards.includes(id)) { state.selectedCards.push(id); render(); }
-    };
+// ── PITCH ORDER ───────────────────────────────────────────────────────────────
+function rPitch(mc){
+  const cards=S.hand;
+  mc.innerHTML=`<div>
+<div class="tbadge">TURN ${S.turn}</div>
+<div class="pbanner">Pitch Order</div>
+<div class="instr">Click cards in the order you want to pitch them. First click = deepest in deck.</div>
+<div class="zlabel">Cards to pitch</div>
+<div class="hand-area"><div class="crow">${cards.map(c=>{const i=S.sel.indexOf(c.id);return ch(c,i!==-1?'psel':'',i!==-1?i+1:null)}).join('')}</div></div>
+<div style="margin-top:10px;font-size:11px;color:var(--text-muted)">Order: ${S.sel.length?S.sel.map(id=>{const c=cards.find(x=>x.id===id);return`<span class="hp">${c?c.name:id}</span>`}).join(' → '):'click cards above'}</div>
+<div class="abar" style="margin-top:12px">
+  <button class="btn btn-b" onclick="doPitch()" ${S.sel.length===cards.length?'':'disabled'}>Pitch to bottom of deck</button>
+  <button class="btn btn-o" onclick="S.sel=[];render()">Reset</button>
+</div></div>`;
+  document.querySelectorAll('.hand-area .fc,.hand-area .pc').forEach(el=>{
+    el.onclick=()=>{const id=el.dataset.id;if(!S.sel.includes(id)){S.sel.push(id);render()}};
   });
 }
 
-function resetPitchOrder() { state.selectedCards = []; render(); }
+window.doPitch=function(){
+  const ord=S.sel.map(id=>S.hand.find(c=>c.id===id));
+  S.pitchStack.push(...ord);S.deck.push(...ord);S.hand=[];nextTurn();
+};
 
-function confirmPitch() {
-  const ordered = state.selectedCards.map(id => state.hand.find(c=>c.id===id));
-  state.pitchStack.push(...ordered);
-  state.deck.push(...ordered);
-  state.hand = [];
-  state.phase = 'select_discard';
-  startTurn();
+window.callStack=function(){
+  if(!S.pitchStack.length){alert('No cards pitched yet!');return}
+  S.guesses=new Array(S.pitchStack.length).fill(null);
+  S.phase='guess';S.pickerFor=0;S.pSuit='♠';S.pFilter='';render();
+};
+
+// ── GUESS ─────────────────────────────────────────────────────────────────────
+function rGuess(mc){
+  const len=S.pitchStack.length,fab=S.src==='fab';
+  const allFilled=S.guesses.every(g=>g!==null);
+  const uniq={};
+  if(fab)for(const c of S.master){if(!uniq[c.identifier])uniq[c.identifier]=c}
+
+  mc.innerHTML=`<div>
+<div class="pbanner">Recall the Pitch Stack</div>
+<div class="instr">Enter the <span class="hg">${len} cards</span> in your pitch stack: #1 = deepest, #${len} = soonest.</div>
+<div class="ggrid">${S.guesses.map((g,i)=>`
+<div class="gslot${g?' filled':''}" onclick="OP(${i})">
+  <div class="si">#${i+1}</div>
+  ${g?(fab?`<div style="font-size:10px;color:var(--text-main);line-height:1.3">${g.name}${g.pitchStr?' ('+g.pitchStr+')':''}</div>`
+    :`<div style="font-size:14px;font-weight:500" class="${RS.has(g.suit)?'red':'black'}">${g.rank}${g.suit}</div>`)
+    :`<div style="font-size:18px;color:rgba(255,255,255,.2)">?</div>`}
+</div>`).join('')}</div>
+${S.pickerFor!==-1?(fab?fabPicker(uniq):pokerPicker()):''}
+<div class="abar" style="margin-top:16px">
+  <button class="btn btn-gold" onclick="doSubmit()" ${allFilled?'':'disabled'}>Submit Guesses</button>
+  <button class="btn btn-o" onclick="S.phase='discard';render()">Cancel</button>
+</div></div>`;
 }
 
-function callPitchStack() {
-  if (state.pitchStack.length === 0) { alert('No cards have been pitched yet!'); return; }
-  state.guesses = new Array(state.pitchStack.length).fill(null);
-  state.phase = 'guess';
-  state.pickerFor = 0;
-  state.pickerSuit = '♠';
-  render();
+function fabPicker(uniq){
+  const cards=Object.values(uniq);
+  const pf=S.pFilter;
+  const fil=pf===''?cards:pf===null?cards.filter(c=>!c.pitch):cards.filter(c=>c.pitchStr===pf);
+  return`<div class="picker">
+<div class="pl">PICK CARD FOR SLOT #${S.pickerFor+1}</div>
+<div class="prow" style="margin-bottom:10px">
+  ${[['','All'],['red','Red'],['yellow','Yellow'],['blue','Blue'],['null','No pitch']].map(([v,l])=>`<button class="mb${S.pFilter===(v==='null'?null:v)?' act':''}" onclick="SPF(${v==='null'?'null':"'"+v+"'"})">${l}</button>`).join('')}
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;max-height:180px;overflow-y:auto;padding:2px">
+  ${fil.map(c=>`<div class="fc" data-id="${c.id}" style="cursor:pointer" onclick="PFC('${c.identifier}')">
+    <img src="${c.imgUrl}" alt="${c.name}" onerror="this.style.display='none'">
+    ${c.pitch?`<div class="pd p${c.pitch}"></div>`:''}
+    <div class="cl">${c.name}${c.pitchStr?' ('+c.pitchStr+')':''}</div>
+  </div>`).join('')}
+</div></div>`;
 }
 
-function renderGuess(mc) {
-  const len = state.pitchStack.length;
-  const allFilled = state.guesses.every(g=>g!==null);
-  mc.innerHTML = `
-    <div>
-      <div class="phase-banner">Recall the Pitch Stack</div>
-      <div class="instruction">
-        Enter the <span class="highlight-gold">${len} cards</span> in your pitch stack, in order from deepest (#1) to soonest (#${len}).
-      </div>
-      <div class="zone-label">Your guesses — click a slot to edit</div>
-      <div class="guess-grid">
-        ${state.guesses.map((g,i) => `
-          <div class="guess-slot ${g?'filled':''}" onclick="openPicker(${i})">
-            <div class="slot-idx">#${i+1}</div>
-            ${g ? `<div style="font-size:14px;font-weight:500" class="${RED_SUITS.has(g.suit)?'red':'black'}">${g.rank}${g.suit}</div>` : `<div style="font-size:18px;color:rgba(255,255,255,0.2)">?</div>`}
-          </div>`).join('')}
-      </div>
-      ${state.pickerFor !== -1 ? `
-        <div class="card-picker">
-          <div class="pick-label">PICK CARD FOR SLOT #${state.pickerFor+1}</div>
-          <div class="suit-row">
-            ${SUITS.map(s=>`<button class="mini-btn ${s===state.pickerSuit?'active':''}" onclick="setSuit('${s}')">${s}</button>`).join('')}
-          </div>
-          <div class="suit-row" style="flex-wrap:wrap">
-            ${RANKS.map(r=>`<button class="mini-btn" style="font-size:13px" onclick="pickCard('${r}','${state.pickerSuit}')">${r}</button>`).join('')}
-          </div>
-        </div>` : ''}
-      <div class="action-bar" style="margin-top:16px">
-        <button class="btn btn-gold" onclick="submitGuesses()" ${allFilled?'':'disabled'}>Submit Guesses</button>
-        <button class="btn btn-outline" onclick="cancelGuess()">Cancel</button>
-      </div>
-    </div>`;
+function pokerPicker(){
+  return`<div class="picker">
+<div class="pl">PICK CARD FOR SLOT #${S.pickerFor+1}</div>
+<div class="prow">${SUITS.map(s=>`<button class="mb${s===S.pSuit?' act':''}" onclick="SS('${s}')">${s}</button>`).join('')}</div>
+<div class="prow" style="flex-wrap:wrap">${RANKS.map(r=>`<button class="mb" style="font-size:13px" onclick="PPC('${r}','${S.pSuit}')">${r}</button>`).join('')}</div>
+</div>`;
 }
 
-function openPicker(idx) { state.pickerFor = idx; render(); }
-function setSuit(s) { state.pickerSuit = s; render(); }
-function pickCard(rank, suit) {
-  state.guesses[state.pickerFor] = {rank, suit, id: rank+suit};
-  state.pickerFor = state.pickerFor < state.guesses.length-1 ? state.pickerFor+1 : -1;
-  render();
-}
-function submitGuesses() { state.phase = 'result'; render(); }
-function cancelGuess() { state.phase = 'select_discard'; render(); }
+window.OP=i=>{S.pickerFor=i;S.pFilter='';render()};
+window.SPF=v=>{S.pFilter=v==='null'?null:v;render()};
+window.SS=s=>{S.pSuit=s;render()};
+window.PFC=function(identifier){
+  const c=S.master.find(x=>x.identifier===identifier);if(!c)return;
+  S.guesses[S.pickerFor]={...c};
+  S.pickerFor=S.pickerFor<S.guesses.length-1?S.pickerFor+1:-1;
+  S.pFilter='';render();
+};
+window.PPC=function(rank,suit){
+  S.guesses[S.pickerFor]={id:rank+suit,rank,suit,isPoker:true};
+  S.pickerFor=S.pickerFor<S.guesses.length-1?S.pickerFor+1:-1;render();
+};
+window.doSubmit=()=>{S.phase='result';render()};
 
-function renderResult(mc) {
-  const actual = state.pitchStack;
-  const guesses = state.guesses;
-  let correct = 0;
-  guesses.forEach((g,i) => { if (g && actual[i] && g.id === actual[i].id) correct++; });
-  const pct = Math.round(correct/actual.length*100);
-  mc.innerHTML = `
-    <div class="result-area">
-      <div class="result-title">Results</div>
-      <div class="score-big">${correct} / ${actual.length}</div>
-      <div class="score-sub">${pct}% accuracy · ${correct===actual.length?'Perfect recall!':correct===0?'Keep practicing!':'Good effort!'}</div>
-      <div style="margin-top:20px">
-        <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap">
-          <div>
-            <div class="zone-label" style="text-align:center;margin-bottom:10px">Actual Stack</div>
-            <div class="result-row">
-              ${actual.map((c,i)=>{
-                const isCorrect = guesses[i] && guesses[i].id === c.id;
-                const cl = cardColor(c);
-                return `<div style="text-align:center">
-                  <div style="font-size:9px;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">#${i+1}</div>
-                  <div class="result-card ${isCorrect?'correct':'wrong'}">
-                    <div class="rc-rank ${cl}">${c.rank}</div>
-                    <div class="rc-suit ${cl}">${c.suit}</div>
-                    <div class="rc-badge">${isCorrect?'✓':'✗'}</div>
-                  </div>
-                </div>`;
-              }).join('')}
-            </div>
-          </div>
-          <div>
-            <div class="zone-label" style="text-align:center;margin-bottom:10px">Your Guesses</div>
-            <div class="result-row">
-              ${guesses.map((g,i)=>{
-                const isCorrect = g && actual[i] && g.id === actual[i].id;
-                if (!g) return `<div style="text-align:center"><div style="font-size:9px;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">#${i+1}</div><div class="result-card wrong" style="display:flex;align-items:center;justify-content:center;color:#aaa;font-size:12px">—</div></div>`;
-                const cl = cardColor(g);
-                return `<div style="text-align:center">
-                  <div style="font-size:9px;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">#${i+1}</div>
-                  <div class="result-card ${isCorrect?'correct':'wrong'}">
-                    <div class="rc-rank ${cl}">${g.rank}</div>
-                    <div class="rc-suit ${cl}">${g.suit}</div>
-                    <div class="rc-badge">${isCorrect?'✓':'✗'}</div>
-                  </div>
-                </div>`;
-              }).join('')}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="action-bar" style="justify-content:center;margin-top:20px;gap:12px">
-        <button class="btn btn-gold" onclick="continueGame()">Continue Game</button>
-        <button class="btn btn-outline" onclick="startGame()">New Game</button>
-      </div>
-    </div>`;
+// ── RESULT ────────────────────────────────────────────────────────────────────
+function rResult(mc){
+  const act=S.pitchStack,g=S.guesses,fab=S.src==='fab';
+  let ok=0;
+  g.forEach((x,i)=>{if(x&&act[i]){if(fab?x.identifier===act[i].identifier:x.id===act[i].id)ok++}});
+  const pct=Math.round(ok/act.length*100);
+
+  function rc(c,isOk){
+    if(!c)return`<div class="rcard no"><div class="rov">—</div></div>`;
+    if(fab)return`<div class="rcard ${isOk?'ok':'no'}"><img src="${c.imgUrl}" alt="${c.name}" onerror="this.style.display='none'">${!isOk?`<div class="rov">✗</div>`:''}</div>`;
+    const cl=RS.has(c.suit)?'red':'black';
+    return`<div class="rcard ${isOk?'ok':'no'}" style="background:var(--card-bg)"><div style="font-size:16px;font-weight:600" class="${cl}">${c.rank}</div><div style="font-size:13px" class="${cl}">${c.suit}</div></div>`;
+  }
+
+  mc.innerHTML=`<div class="rarea">
+<div class="rtitle">Results</div>
+<div class="sbig">${ok} / ${act.length}</div>
+<div class="ssub">${pct}% accuracy · ${ok===act.length?'Perfect recall!':ok===0?'Keep practicing!':'Good effort!'}</div>
+<div style="margin-top:20px;display:flex;gap:32px;justify-content:center;flex-wrap:wrap">
+  <div>
+    <div class="zlabel" style="text-align:center;margin-bottom:10px">Actual Stack</div>
+    <div class="rrow">${act.map((c,i)=>{
+      const isOk=g[i]&&(fab?g[i].identifier===c.identifier:g[i].id===c.id);
+      return`<div style="text-align:center"><div style="font-size:9px;color:var(--text-muted);margin-bottom:4px">#${i+1}</div>${rc(c,isOk)}<div style="font-size:14px;margin-top:10px">${isOk?'✓':'✗'}</div></div>`;
+    }).join('')}</div>
+  </div>
+  <div>
+    <div class="zlabel" style="text-align:center;margin-bottom:10px">Your Guesses</div>
+    <div class="rrow">${g.map((x,i)=>{
+      const isOk=x&&act[i]&&(fab?x.identifier===act[i].identifier:x.id===act[i].id);
+      return`<div style="text-align:center"><div style="font-size:9px;color:var(--text-muted);margin-bottom:4px">#${i+1}</div>${rc(x,isOk)}<div style="font-size:14px;margin-top:10px">${isOk?'✓':'✗'}</div></div>`;
+    }).join('')}</div>
+  </div>
+</div>
+<div class="abar" style="justify-content:center;margin-top:20px;gap:12px">
+  <button class="btn btn-gold" onclick="S.pitchStack=[];nextTurn()">Continue Game</button>
+  <button class="btn btn-o" onclick="goHome()">Change Deck</button>
+</div></div>`;
 }
 
-function continueGame() { state.pitchStack = []; startTurn(); }
-
+window.nextTurn=nextTurn;
 render();
 </script>
 </body>
