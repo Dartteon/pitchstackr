@@ -25,10 +25,10 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
 .zlabel{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
 
 /* FAB card */
-.fc{width:72px;height:100px;border-radius:7px;flex-shrink:0;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;user-select:none;overflow:hidden;background:#1c3a6e;border:1px solid #2a4a8a;box-shadow:2px 3px 8px rgba(0,0,0,.5);display:inline-block}
+.fc{width:56px;height:80px;border-radius:7px;flex-shrink:0;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;user-select:none;overflow:hidden;background:#1c3a6e;border:1px solid #2a4a8a;box-shadow:2px 3px 8px rgba(0,0,0,.5);display:inline-block}
 .fc img{width:100%;height:100%;object-fit:cover;display:block;border-radius:6px}
-.fc .cl{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.72);padding:2px 3px;font-size:8px;line-height:1.3;color:#fff;text-align:center;border-radius:0 0 6px 6px}
-.fc .pd{position:absolute;top:3px;right:3px;width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.5)}
+.fc .cl{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.72);padding:1px 2px;font-size:7px;line-height:1.3;color:#fff;text-align:center;border-radius:0 0 6px 6px}
+.fc .pd{position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.5)}
 .p1{background:#e74c3c}.p2{background:#f39c12}.p3{background:#3498db}
 .fc:hover{transform:translateY(-4px);box-shadow:2px 8px 16px rgba(0,0,0,.6)}
 .fc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),2px 12px 20px rgba(0,0,0,.7)}
@@ -36,22 +36,22 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
 .fc.dis{opacity:.5;cursor:default;pointer-events:none}
 
 /* Poker card */
-.pc{width:72px;height:100px;border-radius:7px;background:var(--card-bg);border:1px solid #ccc;display:flex;flex-direction:column;justify-content:space-between;padding:5px 6px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;flex-shrink:0;user-select:none;box-shadow:2px 3px 8px rgba(0,0,0,.5)}
+.pc{width:56px;height:80px;border-radius:7px;background:var(--card-bg);border:1px solid #ccc;display:flex;flex-direction:column;justify-content:space-between;padding:5px 6px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;flex-shrink:0;user-select:none;box-shadow:2px 3px 8px rgba(0,0,0,.5)}
 .pc:hover{transform:translateY(-4px);box-shadow:2px 8px 16px rgba(0,0,0,.6)}
 .pc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),2px 12px 20px rgba(0,0,0,.7)}
 .pc.psel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--pb),2px 12px 20px rgba(0,0,0,.7)}
 .pc.dis{opacity:.5;cursor:default;pointer-events:none}
-.pc .rk{font-size:15px;font-weight:600;line-height:1}.pc .su{font-size:11px;line-height:1}
-.pc .cs{font-size:28px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.pc .rk{font-size:12px;font-weight:600;line-height:1}.pc .su{font-size:9px;line-height:1}
+.pc .cs{font-size:20px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 .pc .bot{transform:rotate(180deg)}
 .red{color:var(--card-red)}.black{color:var(--card-black)}
 
-.hand-area{background:var(--felt-light);border:1px solid var(--felt-border);border-radius:10px;padding:14px 16px;min-height:130px}
-.crow{display:flex;gap:8px;flex-wrap:wrap;min-height:100px;align-items:flex-end}
+.hand-area{background:var(--felt-light);border:1px solid var(--felt-border);border-radius:10px;padding:10px 12px;min-height:100px}
+.crow{display:flex;gap:6px;flex-wrap:wrap;min-height:80px;align-items:flex-end}
 .psa{background:rgba(25,50,100,.2);border:1px solid rgba(59,125,216,.25);border-radius:10px;padding:14px 16px;min-height:80px}
 .pslots{display:flex;gap:8px;flex-wrap:wrap}
 .pslot{position:relative}
-.pslot .sn{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(59,125,216,.6);background:var(--felt);padding:0 4px;letter-spacing:1px;white-space:nowrap}
+.pslot .sn{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(59,125,216,.6);background:var(--felt);padding:0 4px;letter-spacing:1px;white-space:nowrap}
 .da{background:rgba(139,32,32,.1);border:1px solid rgba(192,64,64,.2);border-radius:10px;padding:14px 16px}
 
 .btn{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:9px 18px;border-radius:6px;border:1px solid;cursor:pointer;transition:all .15s;letter-spacing:.5px}
@@ -84,7 +84,7 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
 .rarea{background:rgba(0,0,0,.25);border-radius:10px;padding:20px;text-align:center}
 .rtitle{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);margin-bottom:12px}
 .rrow{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:12px 0}
-.rcard{width:72px;height:100px;border-radius:7px;border:3px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:2px 3px 8px rgba(0,0,0,.5);background:#1c3a6e}
+.rcard{width:56px;height:80px;border-radius:7px;border:3px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:2px 3px 8px rgba(0,0,0,.5);background:#1c3a6e}
 .rcard img{width:100%;height:100%;object-fit:cover}
 .rcard.ok{border-color:#4caf50}.rcard.no{border-color:#e53935}
 .rcard .rov{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:20px}
@@ -125,12 +125,131 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
   <div class="bnote">Practice tracking your pitch stack — cards pitched earlier are deeper in the deck</div>
 </div>
 <script>
-const IMG = 'https://storage.googleapis.com/fabmaster/media/images/';
-const SUITS=['♠','♥','♦','♣'],RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-const RS=new Set(['♥','♦']);
-const PW={red:1,yellow:2,blue:3};
+// ── Image cache (seeded with known cards, grows dynamically) ─────────────────
+const IMG_CACHE = {
+  "amulet of echoes blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/HVY200.webp",
+  "boulder drop red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/APS008.webp",
+  "cartilage crush red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/BVO009.webp",
+  "chokeslam blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/MPG060.webp",
+  "clash of bravado yellow": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/MPG015.webp",
+  "command and conquer red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/HNT260.webp",
+  "cranial crush blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/U-WTR045.webp",
+  "disable blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/MPG075.webp",
+  "enlightened strike red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/R-WTR159.webp",
+  "erase face red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/UPR187.webp",
+  "macho grande blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/MPG043.webp",
+  "midas touch yellow": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/HVY057.webp",
+  "overcrowded blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/SUP216.webp",
+  "remembrance yellow": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/U-WTR163.webp",
+  "riches of tropal-dhani yellow": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/SEA000-RF.webp",
+  "right behind you blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/SUP235.webp",
+  "ripple away blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/HVY209.webp",
+  "rouse the ancients blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/U-MON247.webp",
+  "shelter from the storm red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/PEN321.webp",
+  "sink below red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/U-WTR215.webp",
+  "spinal crush red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/R-WTR044.webp",
+  "staunch response red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/WTR051.webp",
+  "test of iron grip red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/MPG025.webp",
+  "test of strength red": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/HVY239.webp",
+  "the golden son yellow": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/HVY059.webp",
+  "thunder quake blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/MPG090.webp",
+  "thunk blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/HVY079.webp",
+  "thunk yellow": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/HVY078.webp",
+  "visit goldmane estate blue": "https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/MST225.webp"
+};
 
-function imgUrl(id){return IMG+id+'.width-450.png'}
+// Requests in-flight (key -> true) to prevent duplicate fetches
+const IMG_FETCHING = {};
+
+// Normalize a card name+pitch to a cache key
+function imgCacheKey(name, pitch) {
+  const pitchStr = {1:'red',2:'yellow',3:'blue'}[pitch] || String(pitch).toLowerCase();
+  return name.toLowerCase()
+    .normalize('NFD').replace(/̀-ͯ/g,'')  // strip diacritics
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .replace(/\s+/g, ' ').trim()
+    + ' ' + pitchStr;
+}
+
+// Synchronous lookup — returns cached URL or null
+function imgUrl(name, pitch) {
+  if (!pitch) return null;
+  const key = imgCacheKey(name, pitch);
+  return IMG_CACHE[key] || null;
+}
+
+// Convert card name to the slug used by cards.fabtcg.com
+// e.g. "Beseech the Demigon" -> "beseech-the-demigon"
+function nameToFabSlug(name) {
+  return name.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+
+// Async: fetch image URL from cards.fabtcg.com for a card not in cache.
+// Uses allorigins.win as a CORS proxy.
+// On success, updates IMG_CACHE and patches any visible card images.
+async function fetchImgUrl(name, pitchNum) {
+  if (!pitchNum) return;
+  const key = imgCacheKey(name, pitchNum);
+  if (IMG_CACHE[key] || IMG_FETCHING[key]) return;
+  IMG_FETCHING[key] = true;
+
+  const slug = nameToFabSlug(name);
+  const cardPageUrl = 'https://cards.fabtcg.com/card/' + slug + '-' + pitchNum + '/';
+  const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(cardPageUrl);
+
+  try {
+    const resp = await fetch(proxyUrl, {signal: AbortSignal.timeout(8000)});
+    if (!resp.ok) return;
+    const json = await resp.json();
+    const html = json.contents || '';
+    // Extract image code from: /media/cards/large/XXXXX.webp
+    const m = html.match(/\/media\/cards\/large\/([A-Z0-9_\-]+)\.webp/);
+    if (!m) return;
+    const url = 'https://d2wlb52bya4y8z.cloudfront.net/media/cards/large/' + m[1] + '.webp';
+    IMG_CACHE[key] = url;
+    // Patch any card objects already in state that match this name+pitch
+    function patchList(arr) {
+      arr.forEach(function(c) {
+        if (c.name === name && c.pitch === pitchNum && !c.imgUrl) {
+          c.imgUrl = url;
+          // Patch live DOM: inject img into any visible card tile that lacks one
+          const tile = document.querySelector('.fc[data-id="' + c.id + '"]');
+          if (tile) {
+            let img = tile.querySelector('img');
+            if (!img) {
+              img = document.createElement('img');
+              img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:6px';
+              img.onerror = function(){ this.remove(); };
+              tile.appendChild(img);
+            }
+            img.src = url;
+          }
+        }
+      });
+    }
+    patchList(S.deck);
+    patchList(S.hand);
+    patchList(S.pitchStack);
+    patchList(S.discard);
+    patchList(S.master);
+  } catch(e) {
+    // Silently fail — card shows as text
+  }
+}
+// Kick off background fetches for all cards in a parsed deck that lack images
+function prefetchDeckImages(cards) {
+  const seen = new Set();
+  for (const c of cards) {
+    const key = imgCacheKey(c.name, c.pitch);
+    if (!IMG_CACHE[key] && !seen.has(key)) {
+      seen.add(key);
+      fetchImgUrl(c.name, c.pitch);
+    }
+  }
+}
 
 function toSlug(name){
   return name.trim().toLowerCase().replace(/['']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
@@ -160,7 +279,7 @@ function parseDeck(text){
       if(!inDeck) continue;
       const count=+m[1],name=m[2].trim(),pitch=m[3].toLowerCase();
       const pitchNum=PW[pitch],identifier=makeId(name,pitch);
-      for(let i=0;i<count;i++) cards.push({id:identifier+'_'+cards.length,name,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:imgUrl(identifier)});
+      for(let i=0;i<count;i++){const iurl=imgUrl(name,pitchNum);cards.push({id:identifier+'_'+cards.length,name,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:iurl});}
       continue;
     }
 
@@ -175,7 +294,7 @@ function parseDeck(text){
       count=+bm[1];const name=bm[2].trim(),dots=bm[3].length;
       pitchNum=dots;pitch=['','red','yellow','blue'][dots]||null;
       const identifier=makeId(name,pitch);
-      for(let i=0;i<count;i++) cards.push({id:identifier+'_'+cards.length,name,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:imgUrl(identifier)});
+      for(let i=0;i<count;i++){const iurl=imgUrl(name,pitchNum);cards.push({id:identifier+'_'+cards.length,name,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:iurl});}
       continue;
     }
 
@@ -189,7 +308,7 @@ function parseDeck(text){
       ln=ln.replace(/\s*\([A-Z]{2,5}\d*\)\s*$/,'').trim();
       if(!ln) continue;
       const identifier=makeId(ln,pitch);
-      for(let i=0;i<count;i++) cards.push({id:identifier+'_'+cards.length,name:ln,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:imgUrl(identifier)});
+      for(let i=0;i<count;i++){const iurl=imgUrl(ln,pitchNum);cards.push({id:identifier+'_'+cards.length,name:ln,pitch:pitchNum,pitchStr:pitch,identifier,imgUrl:iurl});}
     }
   }
   return cards;
@@ -200,21 +319,27 @@ let S={
   phase:'idle',turn:0,discCount:0,sel:[],guesses:[],
   pickerFor:-1,pSuit:'♠',pFilter:'',
   tab:'fab',importText:'',importErr:'',preview:[],
-  training:true
+  training:false
 };
 
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 function makePoker(){const d=[];for(const s of SUITS)for(const r of RANKS)d.push({id:r+s,rank:r,suit:s,isPoker:true});return shuffle(d)}
 
-function numBadge(n){return`<div style="position:absolute;top:-8px;right:-4px;background:var(--pb);color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt)">${n}</div>`}
+function numBadge(n){return`<div style="position:absolute;top:-8px;right:-4px;background:var(--pb);color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt)">${n}</div>`}
 
 function fcHTML(c,cls='',nb=null){
+  // Name label is always visible; image loads on top and hides the label once ready
+  const nameLabel=`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:3px;text-align:center;pointer-events:none">
+    <div style="font-size:7px;color:var(--text-main);line-height:1.3;word-break:break-word">${c.name}${c.pitchStr?' ('+c.pitchStr+')':''}</div>
+  </div>`;
+  const imgPart=c.imgUrl
+    ? `<img src="${c.imgUrl}" alt="${c.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:6px" onload="this.style.opacity=1" onerror="this.remove()">`
+    : '';
   return`<div style="position:relative;display:inline-block">
-<div class="fc ${cls}" data-id="${c.id}">
-  <img src="${c.imgUrl}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;padding:4px;text-align:center"><div style="font-size:8px;color:var(--text-main);line-height:1.2">${c.name}</div></div>
-  ${c.pitch?`<div class="pd p${c.pitch}"></div>`:''}
-  <div class="cl">${c.name}${c.pitchStr?' ('+c.pitchStr+')':''}</div>
+<div class="fc ${cls}" data-id="${c.id}" style="position:relative">
+  ${nameLabel}
+  ${imgPart}
+  ${c.pitch?`<div class="pd p${c.pitch}" style="position:absolute;top:2px;right:2px;z-index:2"></div>`:''}
 </div>${nb!==null?numBadge(nb):''}</div>`;
 }
 
@@ -251,64 +376,123 @@ function render(){
   else if(S.phase==='result')rResult(mc);
 }
 
+// ── DEFAULT DECK ─────────────────────────────────────────────────────────────
+const DEFAULT_DECK_TEXT=`Deck cards
+3x Boulder Drop (red)
+3x Cartilage Crush (red)
+3x Command and Conquer (red)
+3x Enlightened Strike (red)
+1x Erase Face (red)
+2x Shelter from the Storm (red)
+3x Spinal Crush (red)
+2x Staunch Response (red)
+3x Test of Iron Grip (red)
+3x Test of Strength (red)
+3x Clash of Bravado (yellow)
+1x Riches of Trōpal-Dhani (yellow)
+3x The Golden Son (yellow)
+2x Chokeslam (blue)
+3x Cranial Crush (blue)
+3x Disable (blue)
+3x Macho Grande (blue)
+1x Overcrowded (blue)
+1x Right Behind You (blue)
+3x Ripple Away (blue)
+1x Rouse the Ancients (blue)
+3x Thunder Quake (blue)
+3x Thunk (blue)
+3x Visit Goldmane Estate (blue)`;
+
 // ── IDLE ──────────────────────────────────────────────────────────────────────
 function rIdle(mc){
   const fab=S.tab==='fab';
-  mc.innerHTML=`<div class="iscreen">
-<h2>Load Your Deck</h2>
-<div class="itabs">
-  <button class="itab${fab?' act':''}" onclick="ST('fab')">Fabrary Deck</button>
-  <button class="itab${!fab?' act':''}" onclick="ST('poker')">Poker Cards</button>
-</div>
-${fab?`
-<div class="guide">
-  On Fabrary, open your deck → click <code>Copy</code> (top right) → paste the whole thing below.<br>
-  <code>Deck cards</code> lines are imported. Arena cards, hero, equipment are skipped automatically.
-</div>
-<textarea id="ita" placeholder="Paste your full Fabrary copy here…
+  const pvHTML=S.preview.length
+    ?('<div class="zlabel">'+S.preview.length+' cards loaded \u2014 preview</div>'
+      +'<div class="crow" style="margin-top:6px">'
+      +S.preview.slice(0,14).map(function(c){return fcHTML(c,'dis')}).join('')
+      +(S.preview.length>14?'<span style="font-size:11px;color:var(--text-muted);align-self:center">+'+(S.preview.length-14)+' more</span>':'')
+      +'</div>')
+    :'';
 
-Name: My Deck
-Hero: Victor Goldmane
-Format: Classic Constructed
-Arena cards
-1x Arcanite Skullcap
-…
-Deck cards
-3x Boulder Drop (red)
-3x Spinal Crush (red)
-3x Clash of Bravado (yellow)
-3x Cranial Crush (blue)
-…">${S.importText}</textarea>
-<div class="ierr" id="ierr">${S.importErr}</div>
-<div id="pv" style="margin-top:12px">${S.preview.length?'<div class="zlabel">'+S.preview.length+' cards loaded — preview</div><div class="crow" style="margin-top:6px">'+S.preview.slice(0,14).map(c=>fcHTML(c,'dis')).join('')+(S.preview.length>14?'<span style="font-size:11px;color:var(--text-muted);align-self:center">+' +(S.preview.length-14)+' more</span>':'')+'</div>':''}</div>
-<div class="abar" style="margin-top:14px">
-  <button class="btn btn-gold" onclick="startFab()" ${S.preview.length?'':'disabled'}>Start with This Deck</button>
-  ${S.preview.length?'':'<span style="font-size:11px;color:var(--text-muted)">Paste your deck above to continue</span>'}
-</div>`
-:`<p>Practice with a standard 52-card poker deck to learn the pitch stacking mechanic before using your real FaB cards.</p>
-<button class="btn btn-gold" onclick="startPoker()">Start with Poker Deck</button>`}
-</div>`;
-  const ta=document.getElementById('ita');
-  if(ta){
-    ta.addEventListener('input',e=>{
-      S.importText=e.target.value;
-      const cards=parseDeck(e.target.value);
-      S.preview=cards;
-      S.importErr=cards.length?'':(e.target.value.trim()?'No cards found — make sure you copied from Fabrary':'');
-      // Partial re-render: just update err + button + preview without touching textarea
-      const errEl=document.getElementById('ierr');
-      if(errEl) errEl.textContent=S.importErr;
-      const btn=document.querySelector('.btn-gold');
-      if(btn) btn.disabled=!cards.length;
-      const pvEl=document.getElementById('pv');
-      if(pvEl) pvEl.innerHTML=cards.length
-        ? '<div class="zlabel">'+cards.length+' cards loaded — preview</div><div class="crow" style="margin-top:6px">'+cards.slice(0,14).map(c=>fcHTML(c,'dis')).join('')+(cards.length>14?'<span style="font-size:11px;color:var(--text-muted);align-self:center">+' +(cards.length-14)+' more</span>':'')+'</div>'
-        : '';
-    });
-  }
+  mc.innerHTML='<div class="iscreen">'
+    +'<h2>Load Your Deck</h2>'
+    +'<div class="itabs">'
+    +'<button class="itab'+(fab?' act':'')+'" onclick="ST(\'fab\')">Fabrary Deck</button>'
+    +'<button class="itab'+(!fab?' act':'')+'" onclick="ST(\'poker\')">Poker Cards</button>'
+    +'</div>'
+    +(fab
+      ?('<div class="guide">'
+        +'On Fabrary, open your deck \u2192 click <code>Copy</code> (top right) \u2192 paste the whole thing below.<br>'
+        +'<code>Deck cards</code> lines are imported. Arena cards, hero, equipment are skipped automatically.'
+        +'</div>'
+        +'<div style="margin-bottom:10px">'
+        +'<button class="btn btn-o btn-sm" onclick="loadDefault()" style="font-size:11px">\u26a1 Use sample deck (Victor Goldmane)</button>'
+        +'</div>'
+        +'<textarea id="ita" placeholder="Paste your full Fabrary copy here\u2026&#10;&#10;Deck cards&#10;3x Boulder Drop (red)&#10;3x Spinal Crush (red)&#10;3x Clash of Bravado (yellow)&#10;3x Cranial Crush (blue)&#10;\u2026">'+S.importText+'</textarea>'
+        +'<div class="ierr" id="ierr">'+S.importErr+'</div>'
+        +'<div id="pv" style="margin-top:12px">'+pvHTML+'</div>'
+        +'<div class="abar" style="margin-top:14px">'
+        +'<button class="btn btn-gold" onclick="startFab()"'+(S.preview.length?'':' disabled')+'>Start with This Deck</button>'
+        +'<span id="start-hint" style="font-size:11px;color:var(--text-muted)">'+(S.preview.length?'':'Paste your deck above to continue')+'</span>'
+        +'</div>')
+      :('<p>Practice with a standard 52-card poker deck to learn the pitch stacking mechanic before using your real FaB cards.</p>'
+        +'<button class="btn btn-gold" onclick="startPoker()">Start with Poker Deck</button>'))
+    +'</div>';
+  attachTextareaHandler();
 }
-
 window.ST=t=>{S.tab=t;S.importErr='';render()};
+
+function attachTextareaHandler(){
+  const ta=document.getElementById('ita');
+  if(!ta) return;
+  ta.addEventListener('input',function(){
+    S.importText=this.value;
+    const cards=parseDeck(this.value);
+    S.preview=cards;
+    if(cards.length){
+      S.importErr='';
+      prefetchDeckImages(cards);
+    } else if(this.value.trim()){
+      // Check if there are "Deck cards" lines but nothing parsed
+      const hasDeckSection=/^deck cards/im.test(this.value);
+      const hasCardLines=/^\d+x\s+.+\((red|yellow|blue)\)/im.test(this.value);
+      if(!hasDeckSection) S.importErr='No "Deck cards" section found. Make sure you copied the full Fabrary export.';
+      else if(!hasCardLines) S.importErr='Found "Deck cards" but no cards matched. Expected format: 3x Card Name (red)';
+      else S.importErr='No cards could be parsed. Check the format.';
+    } else {
+      S.importErr='';
+    }
+    // Partial update — avoid re-rendering (loses cursor position)
+    const errEl=document.getElementById('ierr');
+    if(errEl) errEl.textContent=S.importErr;
+    const btn=document.querySelector('button[onclick="startFab()"]');
+    if(btn) btn.disabled=!cards.length;
+    const hintEl=document.getElementById('start-hint');
+    if(hintEl) hintEl.style.display=cards.length?'none':'inline';
+    const pvEl=document.getElementById('pv');
+    if(pvEl){
+      if(cards.length){
+        const show=cards.slice(0,14);
+        pvEl.innerHTML='<div class="zlabel">'+cards.length+' cards loaded</div>'
+          +'<div class="crow" style="margin-top:6px">'
+          +show.map(function(c){return fcHTML(c,'dis')}).join('')
+          +(cards.length>14?'<span style="font-size:11px;color:var(--text-muted);align-self:center">+'+(cards.length-14)+' more</span>':'')
+          +'</div>';
+      } else {
+        pvEl.innerHTML='';
+      }
+    }
+  });
+  // Restore value from state (after re-renders)
+  if(S.importText) ta.value=S.importText;
+}
+window.loadDefault=function(){
+  S.importText=DEFAULT_DECK_TEXT;
+  S.preview=parseDeck(DEFAULT_DECK_TEXT);
+  S.importErr='';
+  prefetchDeckImages(S.preview);
+  render();
+};
 
 window.startFab=function(){
   if(!S.preview.length)return;
@@ -353,7 +537,7 @@ function rDiscard(mc){
 ${S.training?`<div class="psa">
 <div class="zlabel">Pitch Stack (shown for training)</div>
 <div class="pslots">${S.pitchStack.map((c,i)=>`<div class="pslot"><div class="sn">#${i+1}</div>${ch(c,'dis')}</div>`).join('')||'<span style="font-size:11px;color:var(--text-muted);padding:8px">No cards pitched yet</span>'}</div>
-${S.pitchStack.length?`<div class="piinfo" style="margin-top:8px">#1 = deepest · #${S.pitchStack.length} = soonest to draw</div>`:''}
+${S.pitchStack.length?`<div class="piinfo" style="margin-top:8px">#1 = soonest to draw · #${S.pitchStack.length} = deepest</div>`:''}
 </div>`:''}
 ${discPile()}`;
   document.querySelectorAll('#hr .fc,#hr .pc').forEach(el=>{
@@ -379,10 +563,10 @@ function rPitch(mc){
   mc.innerHTML=`<div>
 <div class="tbadge">TURN ${S.turn}</div>
 <div class="pbanner">Pitch Order</div>
-<div class="instr">Click cards in the order you want to pitch them. First click = deepest in deck.</div>
+<div class="instr">Click cards in the order you want to pitch them. First click = soonest to draw (top of pitch stack).</div>
 <div class="zlabel">Cards to pitch</div>
 <div class="hand-area"><div class="crow">${cards.map(c=>{const i=S.sel.indexOf(c.id);return ch(c,i!==-1?'psel':'',i!==-1?i+1:null)}).join('')}</div></div>
-<div style="margin-top:10px;font-size:11px;color:var(--text-muted)">Order: ${S.sel.length?S.sel.map(id=>{const c=cards.find(x=>x.id===id);return`<span class="hp">${c?c.name:id}</span>`}).join(' → '):'click cards above'}</div>
+<div style="margin-top:10px;font-size:11px;color:var(--text-muted)">Order: ${S.sel.length?S.sel.map(id=>{const c=cards.find(x=>x.id===id);return`<span class="hp">${c?(c.name||c.rank+c.suit):id}</span>`}).join(' → '):'click cards above'}</div>
 <div class="abar" style="margin-top:12px">
   <button class="btn btn-b" onclick="doPitch()" ${S.sel.length===cards.length?'':'disabled'}>Pitch to bottom of deck</button>
   <button class="btn btn-o" onclick="S.sel=[];render()">Reset</button>
@@ -412,7 +596,7 @@ function rGuess(mc){
 
   mc.innerHTML=`<div>
 <div class="pbanner">Recall the Pitch Stack</div>
-<div class="instr">Enter the <span class="hg">${len} cards</span> in your pitch stack: #1 = deepest, #${len} = soonest.</div>
+<div class="instr">Enter the <span class="hg">${len} cards</span> in your pitch stack: #1 = soonest to draw · #${len} = deepest.</div>
 <div class="ggrid">${S.guesses.map((g,i)=>`
 <div class="gslot${g?' filled':''}" onclick="OP(${i})">
   <div class="si">#${i+1}</div>
@@ -436,11 +620,11 @@ function fabPicker(uniq){
 <div class="prow" style="margin-bottom:10px">
   ${[['','All'],['red','Red'],['yellow','Yellow'],['blue','Blue'],['null','No pitch']].map(([v,l])=>`<button class="mb${S.pFilter===(v==='null'?null:v)?' act':''}" onclick="SPF(${v==='null'?'null':"'"+v+"'"})">${l}</button>`).join('')}
 </div>
-<div style="display:flex;gap:6px;flex-wrap:wrap;max-height:180px;overflow-y:auto;padding:2px">
-  ${fil.map(c=>`<div class="fc" data-id="${c.id}" style="cursor:pointer" onclick="PFC('${c.identifier}')">
-    <img src="${c.imgUrl}" alt="${c.name}" onerror="this.style.display='none'">
+<div style="display:flex;gap:6px;flex-wrap:wrap;max-height:200px;overflow-y:auto;padding:2px">
+  ${fil.map(c=>`<div style="width:64px;height:90px;border-radius:7px;flex-shrink:0;position:relative;overflow:hidden;background:#1c3a6e;border:2px solid ${S.pitchStack.some(x=>x.identifier===c.identifier)?'var(--gold)':'#2a4a8a'};box-shadow:2px 3px 8px rgba(0,0,0,.5);cursor:pointer" onclick="PFC('${c.identifier}')">
+    <img src="${c.imgUrl}" alt="${c.name}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">
     ${c.pitch?`<div class="pd p${c.pitch}"></div>`:''}
-    <div class="cl">${c.name}${c.pitchStr?' ('+c.pitchStr+')':''}</div>
+    <div class="cl" style="font-size:7px;padding:1px 2px">${c.name}${c.pitchStr?' ('+c.pitchStr+')':''}</div>
   </div>`).join('')}
 </div></div>`;
 }
