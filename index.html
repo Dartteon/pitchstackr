@@ -23,7 +23,7 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
 .stats span strong{color:var(--gold-light);font-size:14px}
 .main{padding:20px 24px;display:flex;flex-direction:column;gap:20px}
 .zlabel{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
-.fc{width:56px;height:80px;border-radius:7px;flex-shrink:0;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;user-select:none;overflow:hidden;background:#1c3a6e;border:1px solid #2a4a8a;box-shadow:2px 3px 8px rgba(0,0,0,.5);display:inline-block}
+.fc{width:64px;height:91px;border-radius:7px;flex-shrink:0;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;user-select:none;overflow:hidden;background:#1c3a6e;border:1px solid #2a4a8a;box-shadow:2px 3px 8px rgba(0,0,0,.5);display:inline-block}
 .fc img{width:100%;height:100%;object-fit:cover;display:block;border-radius:6px}
 .fc .pd{position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.5);z-index:2}
 .p1{background:#e74c3c}.p2{background:#f39c12}.p3{background:#3498db}
@@ -31,7 +31,7 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
 .fc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),2px 12px 20px rgba(0,0,0,.7)}
 .fc.psel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--pb),2px 12px 20px rgba(0,0,0,.7)}
 .fc.dis{opacity:.5;cursor:default;pointer-events:none}
-.pc{width:56px;height:80px;border-radius:7px;background:var(--card-bg);border:1px solid #ccc;display:flex;flex-direction:column;justify-content:space-between;padding:4px 5px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;flex-shrink:0;user-select:none;box-shadow:2px 3px 8px rgba(0,0,0,.5)}
+.pc{width:64px;height:91px;border-radius:7px;background:var(--card-bg);border:1px solid #ccc;display:flex;flex-direction:column;justify-content:space-between;padding:4px 5px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;flex-shrink:0;user-select:none;box-shadow:2px 3px 8px rgba(0,0,0,.5)}
 .pc:hover{transform:translateY(-4px);box-shadow:2px 8px 16px rgba(0,0,0,.6)}
 .pc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),2px 12px 20px rgba(0,0,0,.7)}
 .pc.psel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--pb),2px 12px 20px rgba(0,0,0,.7)}
@@ -73,7 +73,7 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
 .rarea{background:rgba(0,0,0,.25);border-radius:10px;padding:20px;text-align:center}
 .rtitle{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);margin-bottom:12px}
 .rrow{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:12px 0}
-.rcard{width:56px;height:80px;border-radius:7px;border:3px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:2px 3px 8px rgba(0,0,0,.5);background:#1c3a6e}
+.rcard{width:64px;height:91px;border-radius:7px;border:3px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:2px 3px 8px rgba(0,0,0,.5);background:#1c3a6e}
 .rcard img{width:100%;height:100%;object-fit:cover}
 .rcard.ok{border-color:#4caf50}.rcard.no{border-color:#e53935}
 .rcard .rov{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:20px}
@@ -105,6 +105,7 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
         <span>Turn: <strong id="hdr-turn">0</strong></span>
         <span>Pitched: <strong id="hdr-pitched">0</strong></span>
       </div>
+      <span id="db-status" style="font-size:10px;color:#4caf50;letter-spacing:0.5px;display:none"></span>
       <button class="btn btn-sm" id="train-toggle" onclick="toggleTraining()" style="font-size:10px;padding:5px 12px;border-radius:5px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Mono',monospace;letter-spacing:0.5px">Training: OFF</button>
     </div>
   </div>
