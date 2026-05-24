@@ -1,16 +1,34 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="90" fill="#1a2e1a"/>
   <!-- red circle top -->
-  <circle cx="256" cy="158" r="84" fill="rgba(231,76,60,0.12)" stroke="#e74c3c" stroke-width="5"/>
-  <path d="M256,158 C256,150 262,146 268,149 C278,154 280,167 271,175 C259,184 243,179 237,167 C229,151 239,133 257,130 C279,126 299,140 302,161 C306,186 287,208 258,209" fill="none" stroke="#e74c3c" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="256" cy="158" r="84" fill="#e74c3c" stroke="#111" stroke-width="6"/>
+  <path d="M256,158
+    C256,148 263,142 271,146
+    C283,152 285,168 274,178
+    C260,190 240,184 233,170
+    C224,152 236,130 257,127
+    C283,123 306,141 309,166
+    C313,196 291,222 258,223"
+    fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+
   <!-- yellow circle bottom-left -->
-  <circle cx="158" cy="352" r="84" fill="rgba(243,156,18,0.12)" stroke="#f39c12" stroke-width="5"/>
-  <path d="M158,352 C158,344 164,340 170,343 C180,348 182,361 173,369 C161,378 145,373 139,361 C131,345 141,327 159,324 C181,320 201,334 204,355 C208,380 189,402 160,403" fill="none" stroke="#f39c12" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="158" cy="352" r="84" fill="#f39c12" stroke="#111" stroke-width="6"/>
+  <path d="M158,352
+    C158,342 165,336 173,340
+    C185,346 187,362 176,372
+    C162,384 142,378 135,364
+    C126,346 138,324 159,321
+    C185,317 208,335 211,360
+    C215,390 193,416 160,417"
+    fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+
   <!-- blue circle bottom-right -->
-  <circle cx="352" cy="352" r="84" fill="rgba(52,152,219,0.12)" stroke="#3498db" stroke-width="5"/>
-  <path d="M352,352 C352,344 358,340 364,343 C374,348 376,361 367,369 C355,378 339,373 333,361 C325,345 335,327 353,324 C375,320 395,334 398,355 C402,380 383,402 354,403" fill="none" stroke="#3498db" stroke-width="3.5" stroke-linecap="round"/>
-  <!-- connectors -->
-  <line x1="256" y1="242" x2="174" y2="308" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
-  <line x1="256" y1="242" x2="336" y2="308" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
-  <line x1="174" y1="352" x2="336" y2="352" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+  <circle cx="354" cy="352" r="84" fill="#3498db" stroke="#111" stroke-width="6"/>
+  <path d="M354,352
+    C354,342 361,336 369,340
+    C381,346 383,362 372,372
+    C358,384 338,378 331,364
+    C322,346 334,324 355,321
+    C381,317 404,335 407,360
+    C411,390 389,416 356,417"
+    fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
 </svg>
