@@ -19,8 +19,8 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
 #app{max-width:820px;margin:24px auto;background:var(--felt);border-radius:16px;overflow:hidden;border:1px solid var(--felt-border);box-shadow:0 8px 40px rgba(0,0,0,.7)}
 .header{background:linear-gradient(to bottom,#0f1f0f,var(--felt));padding:12px 16px 10px;border-bottom:1px solid var(--felt-border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
 .header h1{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--gold)}
-.stats{display:flex;gap:16px;font-size:12px;color:var(--text-muted);align-items:center}
-.stats span strong{color:var(--gold-light);font-size:14px}
+.stats{display:flex;gap:8px;font-size:10px;color:var(--text-muted);align-items:center}
+.stats span strong{color:var(--gold-light);font-size:11px}
 .main{padding:20px 24px;display:flex;flex-direction:column;gap:20px}
 .zlabel{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
 .fc{width:64px;height:91px;border-radius:7px;flex-shrink:0;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;user-select:none;overflow:hidden;background:#1c3a6e;border:1px solid #2a4a8a;box-shadow:2px 3px 8px rgba(0,0,0,.5);display:inline-block}
@@ -108,13 +108,13 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
     <button id="change-deck-btn" onclick="goHome()" style="display:none;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 10px;border-radius:5px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text-muted);cursor:pointer;margin-left:auto">Change Deck</button>
   </div>
   <div class="main" id="mc"></div>
-  <div class="bnote" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:10px 16px">
+  <div class="bnote" style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:nowrap;padding:7px 12px">
     <div class="stats" id="hdr-stats" style="visibility:hidden">
       <span>Deck: <strong id="hdr-deck">&#x2014;</strong></span>
       <span>Turn: <strong id="hdr-turn">0</strong></span>
       <span>Pitched: <strong id="hdr-pitched">0</strong></span>
     </div>
-    <button class="btn btn-sm" id="train-toggle" onclick="toggleTraining()" style="font-size:10px;padding:4px 8px;border-radius:5px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Mono',monospace;white-space:nowrap">Training: OFF</button>
+    <button class="btn btn-sm" id="train-toggle" onclick="toggleTraining()" style="font-size:9px;padding:3px 7px;border-radius:5px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Mono',monospace;white-space:nowrap">Training: OFF</button>
   </div>
 </div>
 <script>
@@ -196,7 +196,7 @@ let S={
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 function makePoker(){const d=[];for(const s of SUITS)for(const r of RANKS)d.push({id:r+s,rank:r,suit:s,isPoker:true});return shuffle(d)}
 
-function numBadge(n){return '<div style="position:absolute;top:-8px;right:-4px;background:var(--pb);color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt)">'+n+'</div>'}
+function numBadge(n){return '<div style="position:absolute;top:-8px;left:-4px;background:#4caf50;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt)">'+n+'</div>'}
 
 function fcHTML(c,cls,nb){
   cls=cls||'';
@@ -296,7 +296,7 @@ function rIdle(mc){
       ?'<button class="btn btn-gold" onclick="startFab()">Start with This Deck</button>'
       :'<button class="btn btn-o btn-sm" onclick="loadDefault()">\u26a1 Use sample deck (Victor Goldmane)</button>'
            )+'</div>'
-    +'<textarea id="ita" placeholder="On Fabrary: open deck \u2192 \u22ef \u2192 Copy card list to clipboard \u2192 paste here">'+S.importText+'</textarea>'
+    +'<textarea id="ita" placeholder="On Fabrary: Open deck \u2192 \u22ee (top right corner) \u2192 Copy card list to clipboard \u2192 Paste here">'+S.importText+'</textarea>'
     +'<div class="ierr" id="ierr">'+S.importErr+'</div>'
     +'<div id="pv" style="margin-top:12px">'+pvHTML+'</div>'
     +'</div>';
@@ -347,30 +347,49 @@ function nextTurn(){
   if(S.deck.length<4){S.deck=shuffle([...S.deck,...S.discard]);S.discard=[]}
   S.turn++;S.hand=S.deck.splice(0,4);S.sel=[];S.phase='discard';render();
 }
+function pitchStackBox(){
+  if(!S.training) return '';
+  return '<div class="psa" style="margin-top:12px"><div class="zlabel">Pitch Stack (training)</div><div class="pslots">'
+    +S.pitchStack.map((cd,i)=>'<div class="pslot"><div class="sn">#'+(i+1)+'</div>'+ch(cd,'dis')+'</div>').join('')
+    +(S.pitchStack.length?'':'<span style="font-size:11px;color:var(--text-muted);padding:8px">No cards pitched yet</span>')
+    +'</div>'+(S.pitchStack.length?'<div class="piinfo">#1 = soonest to draw \u00b7 #'+S.pitchStack.length+' = deepest</div>':'')+'</div>';
+}
+
 function discPile(){
   if(!S.discard.length) return '';
-  const show=S.discard.slice(-5);
-  return '<div class="da"><div class="zlabel">Discard Pile ('+S.discard.length+')</div><div class="crow">'+show.map(c=>ch(c,'dis')).join('')+(S.discard.length>5?'<span style="font-size:11px;color:var(--text-muted);align-self:center">+'+(S.discard.length-5)+' more</span>':'')+'</div></div>';
+  // Dedupe by identifier, show count overlay
+  const counts={}, uniq=[];
+  S.discard.forEach(function(c){
+    if(!counts[c.identifier]){counts[c.identifier]=0;uniq.push(c);}
+    counts[c.identifier]++;
+  });
+  const cardHeight=91; // px, matches .fc height
+  const scrollH=Math.round(cardHeight*1.5);
+  return '<div class="da"><div class="zlabel">Graveyard ('+S.discard.length+')</div>'
+    +'<div style="overflow-x:hidden;overflow-y:auto;max-height:'+scrollH+'px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:6px;padding:10px 4px 4px 10px;">'
+    +uniq.map(function(cd){
+      const n=counts[cd.identifier];
+      return '<div style="position:relative;flex-shrink:0">'
+        +ch(cd,'dis')
+        +(n>1?'<div style="position:absolute;top:-6px;left:-6px;background:#4caf50;color:#fff;border-radius:50%;width:17px;height:17px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt);z-index:3">'+n+'</div>':'')
+        +'</div>';
+    }).join('')
+    +'</div></div>';
 }
 
 function rDiscard(mc){
   const n=S.sel.length;
   mc.innerHTML='<div>'
-    +'<div class="tbadge">TURN '+S.turn+'</div>'
-    +'<div class="pbanner">Discard Phase</div>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div class="pbanner" style="margin:0">Discard Phase</div>'+(S.training?'<div class="tbadge" style="margin:0">TURN '+S.turn+'</div>':'')+'</div>'
     +'<div class="instr">Select any number of cards to discard. The remaining cards will be pitched to the bottom of your deck.</div>'
     +'<div class="zlabel">Your Hand</div>'
     +'<div class="hand-area"><div class="crow" id="hr">'+S.hand.map(c=>ch(c,S.sel.includes(c.id)?'sel':'')).join('')+'</div></div>'
-    +'<div class="abar" style="margin-top:12px">'
-    +'<button class="btn btn-r" onclick="doDiscard()">Discard '+(n>0?n+' card'+(n>1?'s':''):'0 cards (pitch all)')+'</button>'
-    +'<button class="btn btn-o" onclick="callStack()"><span class="hg">\u2691</span> Call Pitch Stack</button>'
-    
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:8px">'
+    +'<button class="btn btn-r" style="font-size:11px;padding:7px 12px" onclick="doDiscard()">Discard '+(n>0?n+' card'+(n>1?'s':''):'0 cards')+'</button>'
+    +'<button class="btn btn-o" style="font-size:11px;padding:7px 12px" onclick="callStack()"><span class="hg">\u2691</span> Call Pitch Stack</button>'
     +'</div></div>'
-    +(S.training?'<div class="psa"><div class="zlabel">Pitch Stack (training)</div><div class="pslots">'
-      +S.pitchStack.map((c,i)=>'<div class="pslot"><div class="sn">#'+(i+1)+'</div>'+ch(c,'dis')+'</div>').join('')
-      +(S.pitchStack.length?'':'<span style="font-size:11px;color:var(--text-muted);padding:8px">No cards pitched yet</span>')
-      +'</div>'+(S.pitchStack.length?'<div class="piinfo">#1 = soonest to draw \u00b7 #'+S.pitchStack.length+' = deepest</div>':'')+'</div>':'')
-    +discPile();
+    +discPile()
+    +pitchStackBox();
   document.querySelectorAll('#hr .fc,#hr .pc').forEach(el=>{
     el.onclick=()=>{
       const id=el.dataset.id;
@@ -383,23 +402,28 @@ function rDiscard(mc){
 window.doDiscard=function(){
   S.discard.push(...S.hand.filter(c=>S.sel.includes(c.id)));
   S.hand=S.hand.filter(c=>!S.sel.includes(c.id));
-  S.sel=[];S.phase='pitch';render();
+  S.sel=[];
+  // If all cards discarded, nothing to pitch — go straight to next turn
+  if(S.hand.length===0){nextTurn();}
+  else{S.phase='pitch';render();}
 };
 window.goHome=function(){S.phase='idle';S.preview=[];render()};
 
 function rPitch(mc){
   const cards=S.hand;
   mc.innerHTML='<div>'
-    +'<div class="tbadge">TURN '+S.turn+'</div>'
-    +'<div class="pbanner">Pitch Order</div>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div class="pbanner" style="margin:0">Pitch Order</div>'+(S.training?'<div class="tbadge" style="margin:0">TURN '+S.turn+'</div>':'')+'</div>'
     +'<div class="instr">Click cards in the order you want to pitch them. First click = soonest to draw.</div>'
     +'<div class="zlabel">Cards to pitch</div>'
     +'<div class="hand-area"><div class="crow">'+cards.map(c=>{const i=S.sel.indexOf(c.id);return ch(c,i!==-1?'psel':'',i!==-1?i+1:null)}).join('')+'</div></div>'
-    +'<div style="margin-top:10px;font-size:11px;color:var(--text-muted)">Order: '+(S.sel.length?S.sel.map(id=>{const c=cards.find(x=>x.id===id);return '<span class="hp">'+(c?c.name||c.rank+c.suit:id)+'</span>'}).join(' \u2192'):'click cards above')+'</div>'
-    +'<div class="abar" style="margin-top:12px">'
+    +'<div style="margin-top:10px;font-size:11px;color:var(--text-muted)">Order: '+(S.sel.length?S.sel.map(id=>{const c=cards.find(x=>x.id===id);return '<span class="hp">'+(c?c.name||c.rank+c.suit:id)+'</span>'}).join(' \u2192 '):'click cards above')+'</div>'
+    +'<div class="abar" style="margin-top:12px;margin-bottom:12px">'
     +'<button class="btn btn-b" onclick="doPitch()"'+(S.sel.length===cards.length?'':' disabled')+'>Pitch to bottom of deck</button>'
     +'<button class="btn btn-o" onclick="S.sel=[];render()">Reset</button>'
-    +'</div></div>';
+    +'</div>'
+    +discPile()
+    +pitchStackBox()
+    +'</div>';
   document.querySelectorAll('.hand-area .fc,.hand-area .pc').forEach(el=>{
     el.onclick=()=>{const id=el.dataset.id;if(!S.sel.includes(id)){S.sel.push(id);render()}};
   });
