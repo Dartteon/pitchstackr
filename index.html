@@ -557,10 +557,19 @@ function rPitch(mc){
   const cards=S.hand;
   mc.innerHTML='<div>'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div class="pbanner" style="margin:0">Pitch Order</div>'+(S.training?'<div class="tbadge" style="margin:0">TURN '+S.turn+'</div>':'')+'</div>'
-    +(S.sel.length?'<div class="instr">Order: '+S.sel.map(id=>{const c=cards.find(x=>x.id===id);return '<span class="hp">'+(c?c.name||c.rank+c.suit:id)+'</span>'}).join(' \u2192 ')+'</div>':(S.sel.length?'<div class="instr">Order: '+S.sel.map(id=>{const cd=cards.find(x=>x.id===id);return '<span class="hp">'+(cd?cd.name||cd.rank+cd.suit:id)+'</span>'}).join(' \u2192 ')+'</div>':'<div class="instr">Click cards in the order you want to pitch them. First click = soonest to draw.</div>'))
-    +'<div class="zlabel">Cards to pitch</div>'
-    +'<div class="hand-area"><div class="crow">'+cards.map(c=>{const i=S.sel.indexOf(c.id);return ch(c,i!==-1?'psel':'',i!==-1?i+1:null)}).join('')+'</div></div>'
-    +'<div class="abar" style="margin-top:12px">'
+    +'<div class="instr">Click cards in the order you want to pitch them. First click = soonest to draw.</div>'
+    +'<div style="display:flex;gap:12px;align-items:flex-start">'
+    +'<div style="flex:1;min-width:0"><div class="zlabel">Cards to pitch</div>'
+    +'<div class="hand-area"><div class="crow">'+cards.map(function(cd){const i=S.sel.indexOf(cd.id);return ch(cd,i!==-1?'psel':'',i!==-1?i+1:null)}).join('')+'</div></div></div>'
+    +(S.arsenalEnabled?'<div style="flex-shrink:0"><div class="zlabel">Arsenal</div>'
+      +'<div style="display:flex;flex-direction:column;align-items:center;gap:6px;min-width:'+(getCardDims().w+8)+'px">'
+      +(S.arsenal
+        ?ch(S.arsenal,'dis')
+        :'<div style="width:'+getCardDims().w+'px;height:'+getCardDims().h+'px;border-radius:7px;border:1px dashed rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,0.2)">Empty</div>'
+      )
+      +'</div></div>':'')
+    +'</div>'
+    +'<div class="abar" style="margin-top:12px;margin-bottom:12px">'
     +'<button class="btn btn-b" style="font-size:11px;padding:7px 12px" onclick="doPitch()"'+(S.sel.length===cards.length?'':' disabled')+'>Pitch to bottom of deck</button>'
     +'<button class="btn btn-o" style="font-size:11px;padding:7px 12px" onclick="S.sel=[];render()">Reset</button>'
     +'</div>'
