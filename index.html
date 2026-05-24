@@ -258,7 +258,17 @@ window.toggleTraining=function(){S.training=!S.training;render()};
 
 
 const IMG_PRELOAD_CACHE={};
-function preloadImages(cards){const seen=new Set();cards.forEach(function(card){if(!card.imgUrl||seen.has(card.imgUrl))return;seen.add(card.imgUrl);if(IMG_PRELOAD_CACHE[card.imgUrl])return;const img=new Image();img.src=card.imgUrl;IMG_PRELOAD_CACHE[card.imgUrl]=img;});}
+function preloadImages(cards){
+  const seen=new Set();
+  cards.forEach(function(card){
+    if(!card.imgUrl||seen.has(card.imgUrl)) return;
+    seen.add(card.imgUrl);
+    if(IMG_PRELOAD_CACHE[card.imgUrl]) return;
+    const img=new Image();
+    img.src=card.imgUrl;
+    IMG_PRELOAD_CACHE[card.imgUrl]=img;
+  });
+}
 
 function render(){
   updHdr();
@@ -311,6 +321,7 @@ function attachTextareaHandler(){
     S.importText=this.value;
     const cards=parseDeck(this.value);
     S.preview=cards;
+    if(cards.length) preloadImages(cards);
     const hasDeck=/^deck cards/im.test(this.value);
     const hasCards=/^\d+x\s+.+\((red|yellow|blue)\)/im.test(this.value);
     S.importErr=cards.length?'':(this.value.trim()
@@ -338,7 +349,7 @@ function attachTextareaHandler(){
 }
 
 window.ST=function(t){S.tab=t;S.importErr='';render()};
-window.loadDefault=function(){S.importText=DEFAULT_DECK;S.preview=parseDeck(DEFAULT_DECK);S.importErr='';render()};
+window.loadDefault=function(){S.importText=DEFAULT_DECK;S.preview=parseDeck(DEFAULT_DECK);S.importErr='';preloadImages(S.preview);render()};
 window.startFab=function(){if(!S.preview.length)return;S.master=[...S.preview];S.src='fab';init(shuffle([...S.master]))};
 window.startPoker=function(){S.src='poker';init(makePoker())};
 
