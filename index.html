@@ -209,7 +209,8 @@ let S={
   phase:'idle',turn:0,sel:[],guesses:[],
   pickerFor:-1,pSuit:'♠',pFilter:'',
   tab:'fab',importText:'',importErr:'',preview:[],
-  training:false
+  training:false,
+  handSize:4
 };
 
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -320,6 +321,12 @@ function rIdle(mc){
   const pvHTML=S.preview.length?previewHTML(S.preview):'';
   mc.innerHTML='<div class="iscreen">'
     +'<h2 style="margin-bottom:12px;font-size:15px">Load Your Deck</h2>'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:11px;color:var(--text-muted)">'
+    +'<span>Hand size:</span>'
+    +[3,4,5].map(function(n){
+      return '<button onclick="S.handSize='+n+';render()" style="font-family:var(--font-mono,\'IBM Plex Mono\',monospace);font-size:11px;padding:3px 10px;border-radius:4px;border:1px solid '+(S.handSize===n?'var(--gold)':'rgba(255,255,255,0.15)')+';background:'+(S.handSize===n?'rgba(201,168,76,0.15)':'transparent')+';color:'+(S.handSize===n?'var(--gold)':'var(--text-muted)')+';cursor:pointer">'+n+'</button>';
+    }).join('')
+    +'</div>'
     +'<div class="abar" style="margin-bottom:12px">'
     +(S.preview.length
       ?'<button class="btn btn-gold" onclick="startFab()">Start with This Deck</button>'
@@ -374,8 +381,8 @@ window.startPoker=function(){S.src='poker';init(makePoker())};
 
 function init(deck){S.deck=deck;S.discard=[];S.pitchStack=[];S.hand=[];S.turn=0;nextTurn()}
 function nextTurn(){
-  if(S.deck.length<4){S.deck=shuffle([...S.deck,...S.discard]);S.discard=[]}
-  S.turn++;S.hand=S.deck.splice(0,4);S.sel=[];S.phase='discard';render();
+  if(S.deck.length<S.handSize){S.deck=shuffle([...S.deck,...S.discard]);S.discard=[]}
+  S.turn++;S.hand=S.deck.splice(0,S.handSize);S.sel=[];S.phase='discard';render();
 }
 function pitchStackBox(){
   if(!S.training) return '';
