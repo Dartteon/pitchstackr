@@ -349,32 +349,30 @@ function nextTurn(){
 }
 function pitchStackBox(){
   if(!S.training) return '';
-  return '<div class="psa" style="margin-top:12px"><div class="zlabel">Pitch Stack (training)</div><div class="pslots">'
+  return '<div class="psa" style="margin-top:8px"><div class="zlabel">Pitch Stack (training)</div><div class="pslots">'
     +S.pitchStack.map((cd,i)=>'<div class="pslot"><div class="sn">#'+(i+1)+'</div>'+ch(cd,'dis')+'</div>').join('')
     +(S.pitchStack.length?'':'<span style="font-size:11px;color:var(--text-muted);padding:8px">No cards pitched yet</span>')
     +'</div>'+(S.pitchStack.length?'<div class="piinfo">#1 = soonest to draw \u00b7 #'+S.pitchStack.length+' = deepest</div>':'')+'</div>';
 }
 
 function discPile(){
-  if(!S.discard.length) return '';
-  // Dedupe by identifier, show count overlay
   const counts={}, uniq=[];
-  S.discard.forEach(function(c){
-    if(!counts[c.identifier]){counts[c.identifier]=0;uniq.push(c);}
-    counts[c.identifier]++;
+  S.discard.forEach(function(cd){
+    if(!counts[cd.identifier]){counts[cd.identifier]=0;uniq.push(cd);}
+    counts[cd.identifier]++;
   });
-  const cardHeight=91; // px, matches .fc height
-  const scrollH=Math.round(cardHeight*1.5);
-  return '<div class="da"><div class="zlabel">Graveyard ('+S.discard.length+')</div>'
-    +'<div style="overflow-x:hidden;overflow-y:auto;max-height:'+scrollH+'px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:6px;padding:10px 4px 4px 10px;">'
-    +uniq.map(function(cd){
-      const n=counts[cd.identifier];
-      return '<div style="position:relative;flex-shrink:0">'
-        +ch(cd,'dis')
-        +(n>1?'<div style="position:absolute;top:-6px;left:-6px;background:#4caf50;color:#fff;border-radius:50%;width:17px;height:17px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt);z-index:3">'+n+'</div>':'')
-        +'</div>';
-    }).join('')
-    +'</div></div>';
+  const scrollH=Math.round(91*1.5);
+  const inner=S.discard.length
+    ?'<div style="overflow-x:hidden;overflow-y:auto;max-height:'+scrollH+'px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:6px;padding:10px 4px 4px 10px;">'
+      +uniq.map(function(cd){
+        const n=counts[cd.identifier];
+        return '<div style="position:relative;flex-shrink:0">'
+          +ch(cd,'dis')
+          +(n>1?'<div style="position:absolute;top:-6px;left:-6px;background:#4caf50;color:#fff;border-radius:50%;width:17px;height:17px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--felt);z-index:3">'+n+'</div>':'')
+          +'</div>';
+      }).join('')+'</div>'
+    :'<div style="padding:8px 4px;font-size:11px;color:var(--text-muted)">Empty</div>';
+  return '<div class="da" style="margin-top:12px"><div class="zlabel">Graveyard ('+S.discard.length+')</div>'+inner+'</div>';
 }
 
 function rDiscard(mc){
@@ -387,9 +385,10 @@ function rDiscard(mc){
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:8px">'
     +'<button class="btn btn-r" style="font-size:11px;padding:7px 12px" onclick="doDiscard()">Discard '+(n>0?n+' card'+(n>1?'s':''):'0 cards')+'</button>'
     +'<button class="btn btn-o" style="font-size:11px;padding:7px 12px" onclick="callStack()"><span class="hg">\u2691</span> Call Pitch Stack</button>'
-    +'</div></div>'
+    +'</div>'
     +discPile()
-    +pitchStackBox();
+    +pitchStackBox()
+    +'</div>';
   document.querySelectorAll('#hr .fc,#hr .pc').forEach(el=>{
     el.onclick=()=>{
       const id=el.dataset.id;
@@ -413,13 +412,12 @@ function rPitch(mc){
   const cards=S.hand;
   mc.innerHTML='<div>'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div class="pbanner" style="margin:0">Pitch Order</div>'+(S.training?'<div class="tbadge" style="margin:0">TURN '+S.turn+'</div>':'')+'</div>'
-    +'<div class="instr">Click cards in the order you want to pitch them. First click = soonest to draw.</div>'
+    +(S.sel.length?'<div class="instr">Order: '+S.sel.map(id=>{const c=cards.find(x=>x.id===id);return '<span class="hp">'+(c?c.name||c.rank+c.suit:id)+'</span>'}).join(' \u2192 ')+'</div>':(S.sel.length?'<div class="instr">Order: '+S.sel.map(id=>{const cd=cards.find(x=>x.id===id);return '<span class="hp">'+(cd?cd.name||cd.rank+cd.suit:id)+'</span>'}).join(' \u2192 ')+'</div>':'<div class="instr">Click cards in the order you want to pitch them. First click = soonest to draw.</div>'))
     +'<div class="zlabel">Cards to pitch</div>'
     +'<div class="hand-area"><div class="crow">'+cards.map(c=>{const i=S.sel.indexOf(c.id);return ch(c,i!==-1?'psel':'',i!==-1?i+1:null)}).join('')+'</div></div>'
-    +'<div style="margin-top:10px;font-size:11px;color:var(--text-muted)">Order: '+(S.sel.length?S.sel.map(id=>{const c=cards.find(x=>x.id===id);return '<span class="hp">'+(c?c.name||c.rank+c.suit:id)+'</span>'}).join(' \u2192 '):'click cards above')+'</div>'
-    +'<div class="abar" style="margin-top:12px;margin-bottom:12px">'
-    +'<button class="btn btn-b" onclick="doPitch()"'+(S.sel.length===cards.length?'':' disabled')+'>Pitch to bottom of deck</button>'
-    +'<button class="btn btn-o" onclick="S.sel=[];render()">Reset</button>'
+    +'<div class="abar" style="margin-top:12px">'
+    +'<button class="btn btn-b" style="font-size:11px;padding:7px 12px" onclick="doPitch()"'+(S.sel.length===cards.length?'':' disabled')+'>Pitch to bottom of deck</button>'
+    +'<button class="btn btn-o" style="font-size:11px;padding:7px 12px" onclick="S.sel=[];render()">Reset</button>'
     +'</div>'
     +discPile()
     +pitchStackBox()
