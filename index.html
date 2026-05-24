@@ -44,12 +44,12 @@ html,body{min-height:100vh;background:#111a11;font-family:'IBM Plex Mono',monosp
 .fc .pd{position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.5);z-index:2}
 .p1{background:#e74c3c}.p2{background:#f39c12}.p3{background:#3498db}
 .fc:hover{transform:translateY(-4px);box-shadow:2px 8px 16px rgba(0,0,0,.6)}
-.fc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),2px 12px 20px rgba(0,0,0,.7)}
+.fc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px #e74c3c,2px 12px 20px rgba(231,76,60,.4)}
 .fc.psel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--pb),2px 12px 20px rgba(0,0,0,.7)}
 .fc.dis{opacity:.5;cursor:default;pointer-events:none}
 .pc{width:var(--cw);height:var(--ch);border-radius:7px;background:var(--card-bg);border:1px solid #ccc;display:flex;flex-direction:column;justify-content:space-between;padding:4px 5px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;flex-shrink:0;user-select:none;box-shadow:2px 3px 8px rgba(0,0,0,.5)}
 .pc:hover{transform:translateY(-4px);box-shadow:2px 8px 16px rgba(0,0,0,.6)}
-.pc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),2px 12px 20px rgba(0,0,0,.7)}
+.pc.sel{transform:translateY(-8px);box-shadow:0 0 0 2px #e74c3c,2px 12px 20px rgba(231,76,60,.4)}
 .pc.psel{transform:translateY(-8px);box-shadow:0 0 0 2px var(--pb),2px 12px 20px rgba(0,0,0,.7)}
 .pc.dis{opacity:.5;cursor:default;pointer-events:none}
 .pc .rk{font-size:12px;font-weight:600;line-height:1}.pc .su{font-size:9px;line-height:1}
@@ -560,7 +560,7 @@ function rPitch(mc){
     +'<div class="instr">Click cards in the order you want to pitch them. First click = soonest to draw.</div>'
     +'<div style="display:flex;gap:12px;align-items:flex-start">'
     +'<div style="flex:1;min-width:0"><div class="zlabel">Cards to pitch</div>'
-    +'<div class="hand-area"><div class="crow">'+cards.map(function(cd){const i=S.sel.indexOf(cd.id);return ch(cd,i!==-1?'psel':'',i!==-1?i+1:null)}).join('')+'</div></div></div>'
+    +'<div class="hand-area"><div class="crow">'+cards.map(function(cd){const i=S.sel.indexOf(cd.id);return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px">'+ch(cd,i!==-1?'psel':'',i!==-1?i+1:null)+(S.arsenalEnabled?'<button style="font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid transparent;background:transparent;color:transparent;cursor:default;font-family:inherit;white-space:nowrap;pointer-events:none">Arsenal</button>':'')+'</div>';}).join('')+'</div></div></div>'
     +(S.arsenalEnabled?'<div style="flex-shrink:0"><div class="zlabel">Arsenal</div>'
       +'<div style="display:flex;flex-direction:column;align-items:center;gap:6px;min-width:'+(getCardDims().w+8)+'px">'
       +(S.arsenal
