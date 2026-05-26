@@ -196,6 +196,12 @@ function makeId(name,pitch){
 }
 
 function parseDeck(text){
+  // Auto-detect and decode URL-encoded input (e.g. pasted from Fabrary URL)
+  if(text.indexOf('%20')!==-1||text.indexOf('%0A')!==-1){
+    try{ text=decodeURIComponent(text.trim()); }catch(e){}
+  }
+  // Also handle the "name:..." prefix that sometimes appears
+  text=text.replace(/^name%3A[^\n]*\n?/i,'').replace(/^name:[^\n]*\n?/i,'');
   const cards=[];
   const SKIP=/^(name:|hero:|format:|arena cards|deck cards|equipment cards|sideboard|notes|made with|see the full|\/\/|https?:\/\/)/i;
   let inDeck=false;
@@ -384,6 +390,14 @@ function attachTextareaHandler(){
     const cards=parseDeck(this.value);
     S.preview=cards;
     if(cards.length) preloadImages(cards);
+    // If the text was URL-encoded, replace textarea with decoded version
+    if(cards.length && (this.value.indexOf('%20')!==-1||this.value.indexOf('%0A')!==-1)){
+      try{
+        const decoded=decodeURIComponent(this.value.trim());
+        this.value=decoded;
+        S.importText=decoded;
+      }catch(e){}
+    }
     const hasDeck=/^deck cards/im.test(this.value);
     const hasCards=/^\d+x\s+.+\((red|yellow|blue)\)/im.test(this.value);
     S.importErr=cards.length?'':(this.value.trim()
